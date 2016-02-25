@@ -1,0 +1,15 @@
+.container * {
+  margin-top: 6em;
+  text-align: center;
+}
+
+.cats {
+  display: none;
+}
+
+.cats-show {
+  display: none;
+}
+.cats-show.cats-show-active {
+  display: inherit;
+}
