@@ -1,70 +1,17 @@
-var React = require("react");
-var ReactDOM = require("react-dom");
-var CSSTransitionGroup = require("react-addons-css-transition-group");
+import React from 'react';
+import ReactDOM  from 'react-dom';
+import { Router, Route } from 'react-router';
+import { createHistory } from 'history';
 
-var ReactRouter = require("react-router");
-var Router = ReactRouter.Router;
-var Route = ReactRouter.Route;
-var Navigation = ReactRouter.Navigation;
-
-var History = ReactRouter.History;
-var createBrowserHistory = require("history/lib/createBrowserHistory");
-
-var util = require("./utilities");
-
-var App = React.createClass({
-  mixins : [History],
-
-  spillTheBeans : function() {
-    var cats = this;
-    console.log(cats);
-  },
-
-  render: function () {
-    return (
-      <div className="container">
-        <p onClick={this.spillTheBeans}>Wut's up mai bruddahz2?</p>
-        <Good/>
-      </div>
-    )
-  }
-
-});
-
-var Good = React.createClass({
-
-  render: function () {
-    return (
-      <CSSTransitionGroup
-        className="cats"
-        component="p"
-        transitionName="cats"
-        transitionShowTimeout={500}
-        transitionHideTimeout={500}
-        >
-        I like cats
-      </CSSTransitionGroup>
-    )
-  }
-
-});
-
-
-var FourOhFoured = React.createClass({
-  render: function () {
-    return (
-      <div className="container">
-        <h1 className="error-code">{util.errorJoke()}</h1>
-      </div>
-    )
-  }
-});
+import Generator from "./components/Generator"
+import List from "./components/List"
+import FourOhFoured from "./components/FourOhFoured"
 
 
 var routes = (
-  <Router history={createBrowserHistory()}>
-    <Route path="/" component={App}/>
-    <Route path="/good" component={Good}/>
+  <Router history={createHistory()}>
+    <Route path="/" component={Generator}/>
+    <Route path="/list" component={List}/>
     <Route path="*" component={FourOhFoured}/>
   </Router>
 );

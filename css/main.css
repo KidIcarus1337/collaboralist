@@ -1,15 +1,86 @@
-.container * {
-  margin-top: 6em;
+body {
+  background: url("../images/background-lines.png")
+}
+
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+.list-header {
+  margin-top: 1em;
+  color: #84adb1;
   text-align: center;
+  font-size: 50px;
 }
 
-.cats {
-  display: none;
+.list-dashboard {
+  background-color: #fff;
+  max-width: 550px;
+  margin: 0 auto;
 }
 
-.cats-show {
-  display: none;
+.list-container {
+  border: 2px solid #84adb1;
+  border-radius: 6px;
 }
-.cats-show.cats-show-active {
-  display: inherit;
+
+.list {
+  background-color: #4a6063;
+  margin: 1em;
+  border-top: 1px solid #cfcfcf;
+  border-left: 1px solid #cfcfcf;
+  border-right: 1px solid #cfcfcf;
+}
+
+.list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list-item {
+  background-color: #fff;
+  height: 50px;
+  padding-left: 0.6em;
+  border-bottom: 1px solid #cfcfcf;
+  position: relative;
+  cursor: pointer;
+}
+
+.checkmark-space {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+}
+
+.checkmark {
+  stroke: #99ff8c;
+  stroke-dashoffset: 745.74853515625;
+  stroke-dasharray: 745.74853515625;
+  animation: dash 0.5s ease-out forwards;
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 745.74853515625;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.item-name {
+  margin-left: 40px;
+  line-height: 50px;
+  font-size: 18px;
 }
