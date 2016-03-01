@@ -7,12 +7,8 @@ class AddItemBar extends React.Component {
     return (
       <li className="add-item-bar">
         <div>
-          <div className="add-item-count">
-            <input type="text" ref="add-item-count" />
-          </div>
-          <div className="add-item-name">
-            <input type="text" ref="add-item-name" />
-          </div>
+          <input type="text" className="add-item-count" ref="add-item-count" />
+          <input type="text" className="add-item-name" ref="add-item-name" placeholder="New Item" />
         </div>
       </li>
     )
