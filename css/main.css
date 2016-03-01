@@ -79,8 +79,19 @@ body {
   }
 }
 
-.item-name {
+.item-count {
+  display: inline-block;
   margin-left: 40px;
+  padding-left: 10px;
+  border-left: 1px solid;
+  line-height: 50px;
+  font-size: 18px;
+  color: #b9b9b9;
+}
+
+.item-name {
+  display: inline-block;
+  margin-left: 10px;
   line-height: 50px;
   font-size: 18px;
 }

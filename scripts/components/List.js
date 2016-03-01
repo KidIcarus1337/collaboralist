@@ -1,5 +1,6 @@
 import React from "react";
 import Item from "./Item"
+import AddItemBar from "./AddItemBar"
 import util from "../utilities";
 import {Motion, spring} from 'react-motion';
 import autobind from 'autobind-decorator';
@@ -49,6 +50,7 @@ class List extends React.Component{
             <div className="list">
               <ul>
                 {Object.keys(this.state.items).map(this.renderItem)}
+                <AddItemBar />
               </ul>
             </div>
           </div>

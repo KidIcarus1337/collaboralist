@@ -34,6 +34,7 @@ class Item extends React.Component {
           45.2-45.2c0-8.6-2.4-16.6-6.5-23.4l0,0L45.6,
           68.2L24.7,47.3"/>
       </svg>` }}></div>
+          <div className="item-count" style={{borderColor: details.checked ? "#99ff8c" : ""}}>{details.count}</div>
           <div className="item-name">{details.name}</div>
         </div>
       </li>
