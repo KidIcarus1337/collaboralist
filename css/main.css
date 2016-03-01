@@ -44,12 +44,15 @@ body {
   list-style: none;
 }
 
-.list-item {
+.list-item, .add-item-bar {
   background-color: #fff;
   height: 50px;
   padding-left: 0.6em;
   border-bottom: 1px solid #cfcfcf;
   position: relative;
+}
+
+.list-item {
   cursor: pointer;
 }
 
@@ -94,4 +97,29 @@ body {
   margin-left: 10px;
   line-height: 50px;
   font-size: 18px;
+}
+
+.add-item-count, .add-item-name {
+  display: inline-block;
+  height: 50px;
+  border: none;
+  font-size: 18px;
+}
+
+.add-item-count {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0 auto 40px;
+  z-index: 0;
+}
+
+.add-item-name {
+  margin-left: 40px;
+  z-index: 1;
+}
+
+.add-item-count input, .add-item-name input {
+  width: 100%;
+  height: 100%;
 }
