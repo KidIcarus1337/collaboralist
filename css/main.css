@@ -103,42 +103,15 @@ input {
   font-size: 18px;
 }
 
-.add-item-bar {
-
-}
-
-.add-item-count, .add-item-name {
-  display: block;
+.add-item {
   height: 100%;
+  width: 100%;
   position: absolute;
-  left: 0;
-  right: 0;
+  padding-left: 60px;
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.3);
   overflow: hidden;
   font-size: 18px;
-}
-
-.add-item-count {
-  z-index: 0;
-}
-
-.add-item-name {
-  z-index: 1;
-}
-
-.add-item-count input, .add-item-name input {
-  width: 100%;
-  height: 100%;
-  box-shadow: inset 0 1px 0 rgba(0,0,0,0.3);
-  border: none;
-
-}
-
-.add-item-count input {
-  padding-left: 60px;
-}
-
-.add-item-name input {
-
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
