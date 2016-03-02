@@ -2,7 +2,6 @@ import React from "react";
 import Item from "./Item"
 import AddItemBar from "./AddItemBar"
 import util from "../utilities";
-import {Motion, spring} from 'react-motion';
 import autobind from 'autobind-decorator';
 
 @autobind
