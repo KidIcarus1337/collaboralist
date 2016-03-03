@@ -1,6 +1,7 @@
 import React from "react";
 import Item from "./Item"
-import AddItemBar from "./AddItemBar"
+import AddItemBar from "./AddItemBar";
+import SearchSuggestions from "./SearchSuggestions";
 import util from "../utilities";
 import autobind from 'autobind-decorator';
 
@@ -10,13 +11,15 @@ class List extends React.Component{
     super();
 
     this.state = {
-      items: {}
+      items: {},
+      history: {}
     }
   }
 
   componentDidMount() {
     this.setState({
-      items: require("../sample-items")
+      items: require("../sample-items"),
+      history: require("../sample-history")
     });
   }
 
@@ -49,8 +52,9 @@ class List extends React.Component{
             <div className="list">
               <ul>
                 {Object.keys(this.state.items).map(this.renderItem)}
-                <AddItemBar />
+                <AddItemBar addItem={this.addItem} />
               </ul>
+              <SearchSuggestions />
             </div>
           </div>
         </div>

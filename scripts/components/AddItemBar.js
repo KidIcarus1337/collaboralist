@@ -1,21 +1,30 @@
 import React from "react";
-import {Motion, spring} from 'react-motion';
+import Fuse from "fuse.js";
 import autobind from 'autobind-decorator';
 
 @autobind
 class AddItemBar extends React.Component {
-  handleOnChange() {
+  parseEntry() {
     var entryValues = (this.refs.addItem.value).split(" ");
-    if (!isNaN(entryValues[0])) {
-      entryValues.shift();
-      var searchParameter = entryValues.join(" ");
-      console.log(searchParameter);
-    }
+    var itemCount = isNaN(entryValues[0]) ? "" : entryValues.splice(0, 1);
+    var searchParameter = entryValues.join(" ");
+    return {itemCount: itemCount, searchParameter: searchParameter};
+  }
+
+  handleOnChange() {
+    var parsedEntry = this.parseEntry();
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    alert("blah");
+    var parsedEntry = this.parseEntry();
+    var item = {
+      name: parsedEntry.searchParameter,
+      count: parsedEntry.itemCount,
+      checked: false
+    };
+    this.props.addItem(item);
+    this.refs.addItem.value = "";
   }
 
   render() {
