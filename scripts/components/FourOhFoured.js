@@ -1,11 +1,10 @@
 import React from "react";
-import util from "../utilities";
 
 class FourOhFoured extends React.Component {
   render() {
     return (
       <div className="container">
-        <h1 className="error-code">{util.errorJoke()}</h1>
+        <h1 className="error-code">Oops! You dun goofed!</h1>
       </div>
     )
   }

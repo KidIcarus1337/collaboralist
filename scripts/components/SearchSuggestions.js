@@ -1,5 +1,4 @@
 import React from "react";
-import Fuse from "fuse.js";
 import autobind from 'autobind-decorator';
 
 @autobind

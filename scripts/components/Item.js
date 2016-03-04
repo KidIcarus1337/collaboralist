@@ -8,12 +8,22 @@ class Item extends React.Component {
     this.props.checkItem(key);
   }
 
+  confirmChange(event) {
+    event.preventDefault();
+    var details = this.props.details;
+    var key = this.props.index;
+    this.props.updateItem(key, this.refs.itemText.value);
+    this.refs.itemText.value = details.count ? `${details.count} - ${details.name}` : `${details.name}`;
+    this.refs.itemText.blur();
+  }
+
   render() {
     var details = this.props.details;
     return (
-      <li className="list-item" onClick={this.onButtonClick}>
+      <li className="list-item" >
         <div>
-          <div className="checkmark-space" dangerouslySetInnerHTML={{ __html: `<svg
+          <div className="checkmark-container" style={{borderColor: details.checked ? "#99ff8c" : "#cfcfcf"}} onClick={this.onButtonClick}>
+            <div className="checkmark-space" dangerouslySetInnerHTML={{ __html: `<svg
         version="1.1"
         id="Layer_1"
         xmlns="http://www.w3.org/2000/svg"
@@ -34,8 +44,10 @@ class Item extends React.Component {
           45.2-45.2c0-8.6-2.4-16.6-6.5-23.4l0,0L45.6,
           68.2L24.7,47.3"/>
       </svg>` }}></div>
-          <div className="item-count" style={{borderColor: details.checked ? "#99ff8c" : ""}}>{details.count}</div>
-          <div className="item-name">{details.name}</div>
+          </div>
+          <form onSubmit={this.confirmChange}>
+            <input className="item-text" ref="itemText" onBlur={this.confirmChange} defaultValue={details.count ? `${details.count} - ${details.name}` : `${details.name}`} />
+          </form>
         </div>
       </li>
     )

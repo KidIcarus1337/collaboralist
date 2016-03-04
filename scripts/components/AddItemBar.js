@@ -1,25 +1,19 @@
 import React from "react";
 import Fuse from "fuse.js";
+import util from "../utilities";
 import autobind from 'autobind-decorator';
 
 @autobind
 class AddItemBar extends React.Component {
-  parseEntry() {
-    var entryValues = (this.refs.addItem.value).split(" ");
-    var itemCount = isNaN(entryValues[0]) ? "" : entryValues.splice(0, 1);
-    var searchParameter = entryValues.join(" ");
-    return {itemCount: itemCount, searchParameter: searchParameter};
-  }
-
   handleOnChange() {
-    var parsedEntry = this.parseEntry();
+    var parsedEntry = util.parseEntry(this.refs.addItem.value);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    var parsedEntry = this.parseEntry();
+    var parsedEntry = util.parseEntry(this.refs.addItem.value);
     var item = {
-      name: parsedEntry.searchParameter,
+      name: parsedEntry.itemName,
       count: parsedEntry.itemCount,
       checked: false
     };

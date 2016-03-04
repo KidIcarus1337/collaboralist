@@ -11,6 +11,7 @@ class List extends React.Component{
     super();
 
     this.state = {
+      name: "List",
       items: {},
       history: {}
     }
@@ -23,6 +24,16 @@ class List extends React.Component{
     });
   }
 
+  updateItem(key, entry) {
+    var parsedEntry = util.parseEntry(entry);
+    if (!parsedEntry.itemName) {
+      return this.deleteItem(key);
+    }
+    this.state.items[key].count = parsedEntry.itemCount;
+    this.state.items[key].name = parsedEntry.itemName;
+    this.setState({items: this.state.items});
+  }
+
   addItem(item) {
     var timestamp = (new Date()).getTime();
     this.state.items["item-" + timestamp] = item;
@@ -31,7 +42,7 @@ class List extends React.Component{
 
   renderItem(key) {
     return (
-      <Item key={key} index={key} details={this.state.items[key]} checkItem={this.checkItem} />
+      <Item key={key} index={key} details={this.state.items[key]} checkItem={this.checkItem} updateItem={this.updateItem} />
     )
   }
 
@@ -42,10 +53,17 @@ class List extends React.Component{
     });
   }
 
+  deleteItem(key) {
+    delete this.state.items[key];
+    this.setState({
+      items: this.state.items
+    });
+  }
+
   render() {
     return (
       <div className="container">
-        <h1 className="list-header unselectable">List</h1>
+        <h1 className="list-header unselectable">{this.state.name}</h1>
         <div className="list-dashboard">
           {/*<div className="reference-drawer"></div>*/}
           <div className="list-container">
