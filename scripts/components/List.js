@@ -13,7 +13,8 @@ class List extends React.Component{
     this.state = {
       name: "List",
       items: {},
-      history: {}
+      history: {},
+      suggestions: []
     }
   }
 
@@ -60,6 +61,13 @@ class List extends React.Component{
     });
   }
 
+  populateSuggestions(suggestions) {
+    this.state.suggestions = suggestions;
+    this.setState({
+      suggestions: this.state.suggestions
+    });
+  }
+
   render() {
     return (
       <div className="container">
@@ -70,9 +78,9 @@ class List extends React.Component{
             <div className="list">
               <ul>
                 {Object.keys(this.state.items).map(this.renderItem)}
-                <AddItemBar addItem={this.addItem} />
+                <AddItemBar addItem={this.addItem} history={this.state.history} suggestions={this.state.suggestions} populateSuggestions={this.populateSuggestions} />
               </ul>
-              <SearchSuggestions />
+              <SearchSuggestions suggestions={this.state.suggestions} />
             </div>
           </div>
         </div>

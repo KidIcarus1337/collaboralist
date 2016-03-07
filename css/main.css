@@ -51,6 +51,7 @@ input {
 }
 
 .list {
+  position: relative;
   background-color: #4a6063;
   margin: 1em;
   border-top: 1px solid #cfcfcf;
@@ -69,10 +70,6 @@ input {
   height: 50px;
   border-bottom: 1px solid #cfcfcf;
   position: relative;
-}
-
-.list-item {
-
 }
 
 .checkmark-container {
@@ -118,7 +115,6 @@ input {
   padding-left: 60px;
   border: none;
   z-index: 0;
-
   overflow: hidden;
   font-size: 18px;
 }
@@ -135,5 +131,27 @@ input {
 }
 
 .suggestions-box {
-  display: none;
+  position: absolute;
+  width: 100%;
+  border-left: 2px solid #84adb1;
+  border-right: 2px solid #84adb1;
+  border-bottom: 2px solid #84adb1;
+  background: #fff;
+}
+
+.suggestions-header {
+  margin: 10px 30px 10px 5px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #d8d8d8;
+  color: #858585;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.suggestion {
+  padding: 4px 0 4px 60px;
+  font-size: 18px;
+}
+.suggestion:hover {
+  background-color: #e0f1f1;
 }

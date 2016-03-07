@@ -7,11 +7,17 @@ import autobind from 'autobind-decorator';
 class AddItemBar extends React.Component {
   handleOnChange() {
     var parsedEntry = util.parseEntry(this.refs.addItem.value);
+    var fuse = new Fuse(this.props.history, {keys: ["name"], id: "name"});
+    var suggestions = fuse.search(parsedEntry.itemName);
+    this.props.populateSuggestions(suggestions);
   }
 
   handleSubmit(event) {
     event.preventDefault();
     var parsedEntry = util.parseEntry(this.refs.addItem.value);
+    if (!parsedEntry.itemName) {
+      return;
+    }
     var item = {
       name: parsedEntry.itemName,
       count: parsedEntry.itemCount,
