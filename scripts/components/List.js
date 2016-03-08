@@ -14,7 +14,8 @@ class List extends React.Component{
       name: "List",
       items: {},
       history: {},
-      suggestions: []
+      suggestions: [],
+      highlightIndex: 0
     }
   }
 
@@ -68,6 +69,10 @@ class List extends React.Component{
     });
   }
 
+  changeHighlightIndex() {
+
+  }
+
   render() {
     return (
       <div className="container">
@@ -80,7 +85,7 @@ class List extends React.Component{
                 {Object.keys(this.state.items).map(this.renderItem)}
                 <AddItemBar addItem={this.addItem} history={this.state.history} suggestions={this.state.suggestions} populateSuggestions={this.populateSuggestions} />
               </ul>
-              <SearchSuggestions suggestions={this.state.suggestions} />
+              <SearchSuggestions suggestions={this.state.suggestions} highlightIndex={this.state.highlightIndex} />
             </div>
           </div>
         </div>

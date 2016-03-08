@@ -46,7 +46,10 @@ class Item extends React.Component {
       </svg>` }}></div>
           </div>
           <form onSubmit={this.confirmChange}>
-            <input className="item-text" ref="itemText" onBlur={this.confirmChange} defaultValue={details.count ? `${details.count} - ${details.name}` : `${details.name}`} />
+            <input className="item-text"
+                   ref="itemText"
+                   onBlur={this.confirmChange}
+                   defaultValue={details.count ? `${details.count} - ${details.name}` : `${details.name}`} />
           </form>
         </div>
       </li>

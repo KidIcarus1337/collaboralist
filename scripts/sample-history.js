@@ -23,5 +23,15 @@ module.exports = [
     name: "Stupid Fat Hobbitses",
     timesAdded: 2,
     lastAdded: 1456952688066
+  },
+  {
+    name: "Avocados",
+    timesAdded: 2,
+    lastAdded: 1456952688066
+  },
+  {
+    name: "Cheese",
+    timesAdded: 2,
+    lastAdded: 1456952688066
   }
 ];
