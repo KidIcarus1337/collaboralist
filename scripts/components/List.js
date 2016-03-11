@@ -15,7 +15,8 @@ class List extends React.Component{
       items: {},
       history: {},
       suggestions: [],
-      highlightIndex: 0
+      highlightIndex: 0,
+      suggestionsHover: false
     }
   }
 
@@ -44,7 +45,11 @@ class List extends React.Component{
 
   renderItem(key) {
     return (
-      <Item key={key} index={key} details={this.state.items[key]} checkItem={this.checkItem} updateItem={this.updateItem} />
+      <Item key={key}
+            index={key}
+            details={this.state.items[key]}
+            checkItem={this.checkItem}
+            updateItem={this.updateItem} />
     )
   }
 
@@ -69,8 +74,26 @@ class List extends React.Component{
     });
   }
 
-  changeHighlightIndex() {
+  changeHighlightIndex(index) {
+    this.setState({
+      highlightIndex: index
+    });
+  }
 
+  suggestionsMouseOver() {
+    this.setState({
+      suggestionsHover: true
+    });
+  }
+
+  suggestionsMouseOut() {
+    this.setState({
+      suggestionsHover: false
+    });
+  }
+
+  suggestionSubmit(index) {
+    this.refs.addItemBar.suggestionSubmit(index);
   }
 
   render() {
@@ -83,9 +106,21 @@ class List extends React.Component{
             <div className="list">
               <ul>
                 {Object.keys(this.state.items).map(this.renderItem)}
-                <AddItemBar addItem={this.addItem} history={this.state.history} suggestions={this.state.suggestions} populateSuggestions={this.populateSuggestions} />
+                <AddItemBar ref="addItemBar"
+                            addItem={this.addItem}
+                            history={this.state.history}
+                            suggestions={this.state.suggestions}
+                            highlightIndex={this.state.highlightIndex}
+                            suggestionsHover={this.state.suggestionsHover}
+                            changeHighlightIndex={this.changeHighlightIndex}
+                            populateSuggestions={this.populateSuggestions} />
               </ul>
-              <SearchSuggestions suggestions={this.state.suggestions} highlightIndex={this.state.highlightIndex} />
+              <SearchSuggestions suggestionsMouseOver={this.suggestionsMouseOver}
+                                 suggestionsMouseOut={this.suggestionsMouseOut}
+                                 suggestions={this.state.suggestions}
+                                 highlightIndex={this.state.highlightIndex}
+                                 changeHighlightIndex={this.changeHighlightIndex}
+                                 suggestionSubmit={this.suggestionSubmit} />
             </div>
           </div>
         </div>
