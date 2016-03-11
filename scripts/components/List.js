@@ -16,7 +16,8 @@ class List extends React.Component{
       history: {},
       suggestions: [],
       highlightIndex: 0,
-      suggestionsHover: false
+      suggestionsHover: false,
+      autoDelete: true
     }
   }
 
@@ -49,7 +50,9 @@ class List extends React.Component{
             index={key}
             details={this.state.items[key]}
             checkItem={this.checkItem}
-            updateItem={this.updateItem} />
+            updateItem={this.updateItem}
+            deleteItem={this.deleteItem}
+            autoDelete={this.state.autoDelete} />
     )
   }
 

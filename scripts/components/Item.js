@@ -4,8 +4,14 @@ import autobind from 'autobind-decorator';
 @autobind
 class Item extends React.Component {
   onButtonClick() {
-    var key = this.props.index;
+    var props = this.props;
+    var key = props.index;
     this.props.checkItem(key);
+    if (this.props.autoDelete) {
+      setTimeout(function() {
+        props.deleteItem(key);
+      }, 600)
+    }
   }
 
   confirmChange(event) {
@@ -20,9 +26,11 @@ class Item extends React.Component {
   render() {
     var details = this.props.details;
     return (
-      <li className="list-item" >
+      <li className="list-item">
         <div>
-          <div className="checkmark-container" style={{borderColor: details.checked ? "#99ff8c" : "#cfcfcf"}} onClick={this.onButtonClick}>
+          <div className={`checkmark-container ${details.checked ? "unselectable" : ""}`}
+               style={{borderColor: details.checked ? "#99ff8c" : "#cfcfcf"}}
+               onClick={!details.checked ? this.onButtonClick : null}>
             <div className="checkmark-space" dangerouslySetInnerHTML={{ __html: `<svg
         version="1.1"
         id="Layer_1"
@@ -48,6 +56,7 @@ class Item extends React.Component {
           <form onSubmit={this.confirmChange}>
             <input className="item-text"
                    ref="itemText"
+                   disabled={details.checked ? "disabled" : ""}
                    onBlur={this.confirmChange}
                    defaultValue={details.count ? `${details.count} - ${details.name}` : `${details.name}`} />
           </form>

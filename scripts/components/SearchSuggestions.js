@@ -3,8 +3,6 @@ import autobind from 'autobind-decorator';
 
 @autobind
 class SearchSuggestions extends React.Component {
-
-
   render() {
     var props = this.props;
     var highlightIndex = props.highlightIndex;

@@ -48,9 +48,12 @@ class AddItemBar extends React.Component {
       this.props.changeHighlightIndex(newIndex);
       addItemInput.value = addItemInput.value.substring(0, countSpace) + suggestions[newIndex];
     } else if (event.which === 38 && suggestions.length !== 0) {
-      newIndex = highlightIndex === 0 ? suggestions.length - 1 : highlightIndex - 1;
+      newIndex = highlightIndex === 0 || highlightIndex === -1 ? suggestions.length - 1 : highlightIndex - 1;
       this.props.changeHighlightIndex(newIndex);
       addItemInput.value = addItemInput.value.substring(0, countSpace) + suggestions[newIndex];
+      setTimeout(function () {
+        util.setInputSelection(addItemInput, addItemInput.value.length, addItemInput.value.length);
+      }, 0);
     }
   }
 
