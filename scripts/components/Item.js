@@ -26,7 +26,7 @@ class Item extends React.Component {
   render() {
     var details = this.props.details;
     return (
-      <li className="list-item">
+      <li className="list-item" onMouseDown={this.props.onMouseDown}>
         <div>
           <div className={`checkmark-container ${details.checked ? "unselectable" : ""}`}
                style={{borderColor: details.checked ? "#99ff8c" : "#cfcfcf"}}

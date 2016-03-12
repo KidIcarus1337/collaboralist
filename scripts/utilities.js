@@ -15,20 +15,32 @@ let utilities = {
   },
 
   setInputSelection(input, startPos, endPos) {
-  input.focus();
-  if (typeof input.selectionStart != "undefined") {
-    input.selectionStart = startPos;
-    input.selectionEnd = endPos;
-  } else if (document.selection && document.selection.createRange) {
-    // IE branch
-    input.select();
-    var range = document.selection.createRange();
-    range.collapse(true);
-    range.moveEnd("character", endPos);
-    range.moveStart("character", startPos);
-    range.select();
+    input.focus();
+    if (typeof input.selectionStart != "undefined") {
+      input.selectionStart = startPos;
+      input.selectionEnd = endPos;
+    } else if (document.selection && document.selection.createRange) {
+      // IE branch
+      input.select();
+      var range = document.selection.createRange();
+      range.collapse(true);
+      range.moveEnd("character", endPos);
+      range.moveStart("character", startPos);
+      range.select();
+    }
+  },
+
+  reinsert(arr, from, to) {
+    const _arr = arr.slice(0);
+    const val = _arr[from];
+    _arr.splice(from, 1);
+    _arr.splice(to, 0, val);
+    return _arr;
+  },
+
+  clamp(n, min, max) {
+    return Math.max(Math.min(n, max), min);
   }
-}
 };
 
 export default utilities;
