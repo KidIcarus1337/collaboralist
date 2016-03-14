@@ -2,13 +2,9 @@ import React from "react";
 import Item from "./Item"
 import AddItemBar from "./AddItemBar";
 import SearchSuggestions from "./SearchSuggestions";
-import {Motion, spring} from 'react-motion';
 import range from 'lodash.range';
 import util from "../utilities";
 import autobind from 'autobind-decorator';
-
-const springConfig = {stiffness: 300, damping: 50};
-var itemsCount = 3;
 
 @autobind
 class List extends React.Component{
@@ -27,7 +23,7 @@ class List extends React.Component{
       mouse: 0,
       isPressed: false,
       lastPressed: 0,
-      order: range(itemsCount)
+      order: []
     }
   }
 
@@ -58,43 +54,23 @@ class List extends React.Component{
     this.setState({items: this.state.items});
   }
 
-  renderItem(key) {
-    const mouse = this.state.mouse;
-    const isPressed = this.state.isPressed;
-    const order = this.state.order;
-    const lastPressed = this.state.lastPressed;
-    const style = lastPressed === key && isPressed
-      ? {
-      scale: spring(1.1, springConfig),
-      shadow: spring(16, springConfig),
-      y: mouse
-    }
-      : {
-      scale: spring(1, springConfig),
-      shadow: spring(1, springConfig),
-      y: spring(order.indexOf(key) * 100, springConfig)
-    };
-    var self = this;
+  renderItem(key, index) {
     return (
-      <Motion style={style} key={key}>
-        {({scale, shadow, y}) =>
-          <Item key={key}
-                index={key}
-                details={this.state.items[key]}
-                checkItem={this.checkItem}
-                updateItem={this.updateItem}
-                deleteItem={this.deleteItem}
-                autoDelete={this.state.autoDelete}
-                onMouseDown={function(event) {self.handleMouseDown(event, key, y)}}
-                onTouchStart={function(event) {self.handleTouchStart(event, key, y)}}
-                style={{
-                  boxShadow: `rgba(0, 0, 0, 0.2) 0px ${shadow}px ${2 * shadow}px 0px`,
-                  transform: `translate3d(0, ${y}px, 0) scale(${scale})`,
-                  WebkitTransform: `translate3d(0, ${y}px, 0) scale(${scale})`,
-                  zIndex: key === lastPressed ? 99 : key
-                }}/>
-        }
-      </Motion>
+      <Item key={key}
+            index={key}
+            details={this.state.items[key]}
+            checkItem={this.checkItem}
+            updateItem={this.updateItem}
+            deleteItem={this.deleteItem}
+            autoDelete={this.state.autoDelete}
+            mouse={this.state.mouse}
+            isPressed={this.state.isPressed}
+            order={this.state.order}
+            initialOrder={range(this.state.items.length)}
+            lastPressed={this.state.lastPressed}
+            orderIndex={index}
+            onMouseDown={this.handleMouseDown}
+            onTouchStart={this.handleTouchStart}/>
     )
   }
 
@@ -122,6 +98,12 @@ class List extends React.Component{
   }
 
   handleMouseDown(event, pos, pressY) {
+    if (!this.state.order) {
+      this.setState({
+        order: range(this.state.items.length)
+      });
+    }
+    console.log(this.state.order);
     this.setState({
       delta: event.pageY - pressY,
       mouse: pressY,
@@ -137,7 +119,7 @@ class List extends React.Component{
     const lastPressed = this.state.lastPressed;
     if (isPressed) {
       const mouse = event.pageY - delta;
-      const row = util.clamp(Math.round(mouse / 100), 0, this.state.items.length - 1);
+      const row = util.clamp(Math.round(mouse / 50), 0, this.state.items.length - 1);
       const newOrder = util.reinsert(order, order.indexOf(lastPressed), row);
       this.setState({
         mouse: mouse,
