@@ -33,9 +33,9 @@ class List extends React.Component{
       history: require("../sample-history")
     });
     window.addEventListener('touchmove', this.handleTouchMove);
-    window.addEventListener('touchend', this.handleMouseUp);
-    window.addEventListener('mousemove', this.handleMouseMove);
-    window.addEventListener('mouseup', this.handleMouseUp);
+    window.addEventListener('touchend', this.handleReorderUp);
+    window.addEventListener('mousemove', this.handleReorderMove);
+    window.addEventListener('mouseup', this.handleReorderUp);
   }
 
   updateItem(key, entry) {
@@ -49,16 +49,23 @@ class List extends React.Component{
   }
 
   addItem(item) {
+    const order = this.state.order.length !== 0 ? this.state.order : range(Object.keys(this.state.items).length);
+    order.push(Object.keys(this.state.items).length);
     var timestamp = (new Date()).getTime();
     this.state.items["item-" + timestamp] = item;
-    this.setState({items: this.state.items});
+    this.setState({
+      items: this.state.items,
+      order: order
+    });
   }
 
-  renderItem(key, index) {
+  renderItem(key, orderIndex) {
     return (
       <Item key={key}
             index={key}
+            ref={key}
             details={this.state.items[key]}
+            items={this.state.items}
             checkItem={this.checkItem}
             updateItem={this.updateItem}
             deleteItem={this.deleteItem}
@@ -66,10 +73,10 @@ class List extends React.Component{
             mouse={this.state.mouse}
             isPressed={this.state.isPressed}
             order={this.state.order}
-            initialOrder={range(this.state.items.length)}
+            initialOrder={range(Object.keys(this.state.items).length)}
             lastPressed={this.state.lastPressed}
-            orderIndex={index}
-            onMouseDown={this.handleMouseDown}
+            orderIndex={orderIndex}
+            handleReorderStart={this.handleReorderStart}
             onTouchStart={this.handleTouchStart}/>
     )
   }
@@ -81,29 +88,36 @@ class List extends React.Component{
     });
   }
 
-  deleteItem(key) {
+  deleteItem(key, orderIndex) {
+    window.removeEventListener('touchend', this.refs[key].reorderMouseUp);
+    window.removeEventListener('mouseup', this.refs[key].reorderMouseUp);
     delete this.state.items[key];
+    var order = this.state.order.length !== 0 ? this.state.order : range(Object.keys(this.state.items).length - 1);
+    order.splice(order.indexOf(orderIndex), 1);
+    var newOrder = order.map(function(index) {
+      return index > orderIndex ? index - 1 : index;
+    });
     this.setState({
-      items: this.state.items
+      items: this.state.items,
+      order: newOrder
     });
   }
 
-  handleTouchStart(key, pressLocation, e) {
-    this.handleMouseDown(key, pressLocation, e.touches[0]);
+  handleTouchStart(event, key, pressLocation) {
+    this.handleReorderStart(event.touches[0], key, pressLocation);
   }
 
-  handleTouchMove(e) {
-    e.preventDefault();
-    this.handleMouseMove(e.touches[0]);
+  handleTouchMove(event) {
+    event.preventDefault();
+    this.handleReorderMove(event.touches[0]);
   }
 
-  handleMouseDown(event, pos, pressY) {
-    if (!this.state.order) {
-      this.setState({
-        order: range(this.state.items.length)
-      });
-    }
-    console.log(this.state.order);
+  handleReorderStart(event, pos, pressY) {
+    var mySheet = document.styleSheets[0];
+    var firstRule = mySheet.cssRules ? mySheet.cssRules[0] : mySheet.rules[0];
+    firstRule.style.setProperty("cursor", "grabbing", "important");
+    firstRule.style.setProperty("cursor", "-moz-grabbing", "important");
+    firstRule.style.setProperty("cursor", "-webkit-grabbing", "important");
     this.setState({
       delta: event.pageY - pressY,
       mouse: pressY,
@@ -112,15 +126,15 @@ class List extends React.Component{
     });
   }
 
-  handleMouseMove(event) {
-    const isPressed = this.state.isPressed;
-    const delta = this.state.delta;
-    const order = this.state.order;
-    const lastPressed = this.state.lastPressed;
+  handleReorderMove(event) {
+    var isPressed = this.state.isPressed;
+    var delta = this.state.delta;
+    var order = this.state.order.length !== 0 ? this.state.order : range(Object.keys(this.state.items).length);
+    var lastPressed = this.state.lastPressed;
     if (isPressed) {
-      const mouse = event.pageY - delta;
-      const row = util.clamp(Math.round(mouse / 50), 0, this.state.items.length - 1);
-      const newOrder = util.reinsert(order, order.indexOf(lastPressed), row);
+      var mouse = event.pageY - delta;
+      var row = util.clamp(Math.round(mouse / 50), 0, Object.keys(this.state.items).length - 1);
+      var newOrder = util.reinsert(order, order.indexOf(lastPressed), row);
       this.setState({
         mouse: mouse,
         order: newOrder
@@ -128,8 +142,17 @@ class List extends React.Component{
     }
   }
 
-  handleMouseUp() {
-    this.setState({isPressed: false, delta: 0});
+  handleReorderUp() {
+    if (this.state.isPressed) {
+      window.getSelection().removeAllRanges();
+    }
+    var mySheet = document.styleSheets[0];
+    var firstRule = mySheet.cssRules ? mySheet.cssRules[0] : mySheet.rules[0];
+    firstRule.style.cssText = null;
+    this.setState({
+      isPressed: false,
+      delta: 0
+    });
   }
 
   populateSuggestions(suggestions) {

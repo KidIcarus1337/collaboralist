@@ -22,7 +22,11 @@ var historyApiFallback = require('connect-history-api-fallback');
 */
 
 gulp.task('styles',function() {
-  // Compiles CSS
+  // Compile fonts
+  gulp.src('node_modules/bootstrap/fonts/**.*')
+    .pipe(gulp.dest('build/fonts'));
+
+  // Compile CSS
   gulp.src(['css/main.css', 'node_modules/bootstrap/dist/css/bootstrap.min.css'])
     .pipe(autoprefixer())
     .pipe(gulp.dest('build/css'))

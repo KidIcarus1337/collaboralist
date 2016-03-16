@@ -1,18 +1,69 @@
 import React from "react";
 import {Motion, spring} from 'react-motion';
+import range from 'lodash.range';
 import autobind from 'autobind-decorator';
 
-const springConfig = {stiffness: 300, damping: 50};
+const springConfig = {stiffness: 300, damping: 25};
 
 @autobind
 class Item extends React.Component {
-  onButtonClick() {
+  constructor() {
+    super();
+
+    this.state = {
+      itemHovered: false,
+      reorderHovered: false,
+      reorderPressed: false
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('touchend', this.reorderMouseUp);
+    window.addEventListener('mouseup', this.reorderMouseUp);
+  }
+
+  itemMouseOver() {
+    this.setState({
+      itemHovered: true
+    });
+  }
+  itemMouseOut() {
+    this.setState({
+      itemHovered: false
+    });
+  }
+
+  reorderMouseOver() {
+    this.setState({
+      reorderHovered: true
+    });
+  }
+  reorderMouseOut() {
+    this.setState({
+      reorderHovered: false
+    });
+  }
+
+  reorderMouseDown(event, orderIndex, order) {
+    this.setState({
+      reorderPressed: true
+    });
+    this.props.handleReorderStart(event, orderIndex, order.indexOf(orderIndex) * 50);
+  }
+  reorderMouseUp() {
+    this.setState({
+      reorderPressed: false
+    });
+  }
+
+  chechmarkClick() {
     var props = this.props;
     var key = props.index;
+    var orderIndex = props.orderIndex;
     this.props.checkItem(key);
     if (this.props.autoDelete) {
       setTimeout(function() {
-        props.deleteItem(key);
+        props.deleteItem(key, orderIndex);
       }, 600)
     }
   }
@@ -30,38 +81,40 @@ class Item extends React.Component {
     const mouse = this.props.mouse;
     const isPressed = this.props.isPressed;
     const initialOrder = this.props.initialOrder;
-    const order = this.props.order;
+
+    const order = this.props.order.length !== 0 ? this.props.order : range(Object.keys(this.props.items).length);
     const lastPressed = this.props.lastPressed;
-    const index = this.props.orderIndex;
-    const style = lastPressed === index && isPressed
+    const orderIndex = this.props.orderIndex;
+    const style = lastPressed === orderIndex && isPressed
       ? {
-          scale: spring(1.1, springConfig),
-          shadow: spring(16, springConfig),
-          y: mouse - (index * 50)
+          scale: spring(1.06, springConfig),
+          shadow: spring(12, springConfig),
+          y: mouse - (orderIndex * 50)
         }
       : {
           scale: spring(1, springConfig),
           shadow: spring(0, springConfig),
-          y: spring((order.indexOf(index) - initialOrder.indexOf(index)) * 50, springConfig)
+          y: spring((order.indexOf(orderIndex) - initialOrder.indexOf(orderIndex)) * 50, springConfig)
         };
 
     var details = this.props.details;
     var self = this;
     return (
-      <Motion style={style} key={index}>
+      <Motion style={style} key={orderIndex}>
         {({scale, shadow, y}) =>
           <li className="list-item"
-              onMouseDown={function(event) {self.props.onMouseDown(event, index, order.indexOf(index) * 50)}}
+              onMouseOver={this.itemMouseOver}
+              onMouseOut={this.itemMouseOut}
               style={{
                   boxShadow: `rgba(0, 0, 0, 0.2) 0px ${shadow}px ${2 * shadow}px 0px`,
                   transform: `translate3d(0, ${y}px, 0) scale(${scale})`,
                   WebkitTransform: `translate3d(0, ${y}px, 0) scale(${scale})`,
-                  zIndex: index === lastPressed ? 99 : index
+                  zIndex: orderIndex === lastPressed ? 99 : orderIndex
                 }}>
             <div>
               <div className={`checkmark-container ${details.checked ? "unselectable" : ""}`}
                    style={{borderColor: details.checked ? "#99ff8c" : "#cfcfcf"}}
-                   onClick={!details.checked ? self.onButtonClick : null}>
+                   onClick={!details.checked ? self.chechmarkClick : null}>
                 <div className="checkmark-space" dangerouslySetInnerHTML={{ __html: `<svg
             version="1.1"
             id="Layer_1"
@@ -85,12 +138,20 @@ class Item extends React.Component {
           </svg>` }}></div>
               </div>
               <form onSubmit={self.confirmChange}>
-                <input className="item-text"
+                <input className={`item-text ${isPressed ? "unselectable" : ""}`}
                        ref={(ref) => this.itemText = ref}
-                       disabled={details.checked ? "disabled" : ""}
+                       disabled={details.checked || isPressed ? "disabled" : ""}
                        onBlur={self.confirmChange}
                        defaultValue={details.count ? `${details.count} - ${details.name}` : `${details.name}`}/>
               </form>
+              <div className={`reorder-button ${!(details.checked && this.props.autoDelete) ? "grabbable" : ""}`}
+                   onMouseOver={!(details.checked && this.props.autoDelete) ? this.reorderMouseOver : null}
+                   onMouseOut={!(details.checked && this.props.autoDelete) ? this.reorderMouseOut : null}
+                   onMouseDown={!(details.checked && this.props.autoDelete) ? function(event) {self.reorderMouseDown(event, orderIndex, order)} : null}>
+                <span className="glyphicon glyphicon-menu-hamburger"
+                      style={{opacity: this.state.reorderHovered || this.state.reorderPressed ? 0.6 : 0.2,
+                              display: (this.state.itemHovered || this.state.reorderPressed) && !(details.checked && this.props.autoDelete) ? "initial" : "none"}}></span>
+              </div>
             </div>
           </li>
         }
