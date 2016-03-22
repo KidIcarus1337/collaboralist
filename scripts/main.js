@@ -10,8 +10,8 @@ import FourOhFoured from "./components/FourOhFoured"
 
 var routes = (
   <Router history={createHistory()}>
-    <Route path="/" component={List}/>
-    <Route path="/list" component={List}/>
+    <Route path="/" component={Generator}/>
+    <Route path="/list/:listId" component={List}/>
     <Route path="*" component={FourOhFoured}/>
   </Router>
 );

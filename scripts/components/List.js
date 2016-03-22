@@ -6,8 +6,12 @@ import range from 'lodash.range';
 import util from "../utilities";
 import autobind from 'autobind-decorator';
 
+// Firebase
+import Rebase  from "re-base";
+var base = Rebase.createClass("https://shopping-list-app-temp.firebaseio.com/");
+
 @autobind
-class List extends React.Component{
+class List extends React.Component {
   constructor() {
     super();
 
@@ -28,8 +32,11 @@ class List extends React.Component{
   }
 
   componentDidMount() {
+    base.syncState(this.props.params.listId + "/items", {
+      context: this,
+      state: "items"
+    });
     this.setState({
-      items: require("../sample-items"),
       history: require("../sample-history")
     });
     window.addEventListener('touchmove', this.handleTouchMove);
@@ -38,10 +45,10 @@ class List extends React.Component{
     window.addEventListener('mouseup', this.handleReorderUp);
   }
 
-  updateItem(key, entry) {
+  updateItem(key, entry, orderIndex) {
     var parsedEntry = util.parseEntry(entry);
     if (!parsedEntry.itemName) {
-      return this.deleteItem(key);
+      return this.deleteItem(key, orderIndex);
     }
     this.state.items[key].count = parsedEntry.itemCount;
     this.state.items[key].name = parsedEntry.itemName;
@@ -91,14 +98,16 @@ class List extends React.Component{
   deleteItem(key, orderIndex) {
     window.removeEventListener('touchend', this.refs[key].reorderMouseUp);
     window.removeEventListener('mouseup', this.refs[key].reorderMouseUp);
-    delete this.state.items[key];
     var order = this.state.order.length !== 0 ? this.state.order : range(Object.keys(this.state.items).length - 1);
     order.splice(order.indexOf(orderIndex), 1);
     var newOrder = order.map(function(index) {
       return index > orderIndex ? index - 1 : index;
     });
+    this.state.items[key] = null;
     this.setState({
-      items: this.state.items,
+      items: this.state.items
+    });
+    this.setState({
       order: newOrder
     });
   }

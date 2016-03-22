@@ -1,5 +1,5 @@
 import React from "react";
-import {Motion, spring} from 'react-motion';
+import { Motion, spring } from 'react-motion';
 import range from 'lodash.range';
 import autobind from 'autobind-decorator';
 
@@ -56,7 +56,7 @@ class Item extends React.Component {
     });
   }
 
-  chechmarkClick() {
+  checkmarkClick() {
     var props = this.props;
     var key = props.index;
     var orderIndex = props.orderIndex;
@@ -70,9 +70,10 @@ class Item extends React.Component {
 
   confirmChange(event) {
     event.preventDefault();
-    var details = this.props.details;
-    var key = this.props.index;
-    this.props.updateItem(key, this.itemText.value);
+    var props = this.props;
+    var details = props.details;
+    var key = props.index;
+    this.props.updateItem(key, this.itemText.value, props.orderIndex);
     this.itemText.value = details.count ? `${details.count} - ${details.name}` : `${details.name}`;
     this.itemText.blur();
   }
@@ -114,7 +115,7 @@ class Item extends React.Component {
             <div>
               <div className={`checkmark-container ${details.checked ? "unselectable" : ""}`}
                    style={{borderColor: details.checked ? "#99ff8c" : "#cfcfcf"}}
-                   onClick={!details.checked ? self.chechmarkClick : null}>
+                   onClick={!details.checked ? self.checkmarkClick : null}>
                 <div className="checkmark-space" dangerouslySetInnerHTML={{ __html: `<svg
             version="1.1"
             id="Layer_1"
@@ -150,7 +151,8 @@ class Item extends React.Component {
                    onMouseDown={!(details.checked && this.props.autoDelete) ? function(event) {self.reorderMouseDown(event, orderIndex, order)} : null}>
                 <span className="glyphicon glyphicon-menu-hamburger"
                       style={{opacity: this.state.reorderHovered || this.state.reorderPressed ? 0.6 : 0.2,
-                              display: (this.state.itemHovered || this.state.reorderPressed) && !(details.checked && this.props.autoDelete) ? "initial" : "none"}}></span>
+                              display: (this.state.itemHovered || this.state.reorderPressed) &&
+                              !(details.checked && this.props.autoDelete) ? "initial" : "none"}} />
               </div>
             </div>
           </li>
