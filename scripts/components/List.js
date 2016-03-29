@@ -10,6 +10,8 @@ import autobind from 'autobind-decorator';
 import Rebase  from "re-base";
 var base = Rebase.createClass("https://shopping-list-app-temp.firebaseio.com/");
 
+var deleteTimeout;
+
 @autobind
 class List extends React.Component {
   constructor() {
@@ -17,8 +19,11 @@ class List extends React.Component {
 
     this.state = {
       name: "List",
-      items: {},
-      history: {},
+      firebase: {
+        items: {},
+        history: {},
+        order: {}
+      },
       suggestions: [],
       highlightIndex: 0,
       suggestionsHover: false,
@@ -27,17 +32,24 @@ class List extends React.Component {
       mouse: 0,
       isPressed: false,
       lastPressed: 0,
-      order: []
+      deleteList: []
     }
   }
 
   componentDidMount() {
-    base.syncState(this.props.params.listId + "/items", {
+    base.syncState(this.props.params.listId, {
       context: this,
-      state: "items"
+      state: "firebase",
+      then: function() {
+        if (Object.keys(this.state.firebase.items).length > 1) {
+          this.setState({
+            firebase: {items: {0: null}}
+          });
+        }
+      }
     });
     this.setState({
-      history: require("../sample-history")
+      firebase: {history: require("../sample-history"), items: {0: 0}, order: {0: 0}}
     });
     window.addEventListener('touchmove', this.handleTouchMove);
     window.addEventListener('touchend', this.handleReorderUp);
@@ -50,37 +62,46 @@ class List extends React.Component {
     if (!parsedEntry.itemName) {
       return this.deleteItem(key, orderIndex);
     }
-    this.state.items[key].count = parsedEntry.itemCount;
-    this.state.items[key].name = parsedEntry.itemName;
-    this.setState({items: this.state.items});
+    this.state.firebase.items[key].count = parsedEntry.itemCount;
+    this.state.firebase.items[key].name = parsedEntry.itemName;
+    this.setState({
+      firebase: {items: this.state.firebase.items}
+    });
   }
 
   addItem(item) {
-    const order = this.state.order.length !== 0 ? this.state.order : range(Object.keys(this.state.items).length);
-    order.push(Object.keys(this.state.items).length);
+    var items = this.state.firebase.items;
+    var order = this.state.firebase.order;
     var timestamp = (new Date()).getTime();
-    this.state.items["item-" + timestamp] = item;
+    this.state.firebase.items["item-" + timestamp] = item;
+    if (0 in items) {
+      items[0] = null;
+    } else {
+      order.push(Object.keys(items).length - 1);
+    }
     this.setState({
-      items: this.state.items,
-      order: order
+      firebase: {items: items, order: order}
     });
   }
 
   renderItem(key, orderIndex) {
+    if (key == 0) {
+      return;
+    }
     return (
       <Item key={key}
             index={key}
             ref={key}
-            details={this.state.items[key]}
-            items={this.state.items}
+            details={this.state.firebase.items[key]}
+            items={this.state.firebase.items}
             checkItem={this.checkItem}
             updateItem={this.updateItem}
-            deleteItem={this.deleteItem}
+            setDelete={this.setDelete}
             autoDelete={this.state.autoDelete}
             mouse={this.state.mouse}
             isPressed={this.state.isPressed}
-            order={this.state.order}
-            initialOrder={range(Object.keys(this.state.items).length)}
+            order={this.state.firebase.order}
+            initialOrder={range(Object.keys(this.state.firebase.items).length)}
             lastPressed={this.state.lastPressed}
             orderIndex={orderIndex}
             handleReorderStart={this.handleReorderStart}
@@ -89,26 +110,44 @@ class List extends React.Component {
   }
 
   checkItem(key) {
-    this.state.items[key].checked = !this.state.items[key].checked;
+    this.state.firebase.items[key].checked = !this.state.firebase.items[key].checked;
     this.setState({
-      items: this.state.items
+      firebase: {items: this.state.firebase.items}
     });
+  }
+
+  setDelete(key, orderIndex) {
+    clearTimeout(deleteTimeout);
+    this.setState({
+      deleteList: this.state.deleteList.concat([{key: key, orderIndex: orderIndex}])
+    });
+    var self = this;
+    deleteTimeout = setTimeout(function() {
+      (self.state.deleteList).map(function(obj) {
+        self.deleteItem(obj.key, obj.orderIndex)
+      });
+      self.setState({
+        deleteList: []
+      });
+    }, 600);
   }
 
   deleteItem(key, orderIndex) {
     window.removeEventListener('touchend', this.refs[key].reorderMouseUp);
     window.removeEventListener('mouseup', this.refs[key].reorderMouseUp);
-    var order = this.state.order.length !== 0 ? this.state.order : range(Object.keys(this.state.items).length - 1);
+    var items = this.state.firebase.items;
+    var order = this.state.firebase.order;
     order.splice(order.indexOf(orderIndex), 1);
     var newOrder = order.map(function(index) {
       return index > orderIndex ? index - 1 : index;
     });
-    this.state.items[key] = null;
+    if (Object.keys(items).length - 1 == 0) {
+      items[0] = 0;
+      newOrder = {0: 0};
+    }
+    items[key] = null;
     this.setState({
-      items: this.state.items
-    });
-    this.setState({
-      order: newOrder
+      firebase: {items: items, order: newOrder}
     });
   }
 
@@ -138,15 +177,18 @@ class List extends React.Component {
   handleReorderMove(event) {
     var isPressed = this.state.isPressed;
     var delta = this.state.delta;
-    var order = this.state.order.length !== 0 ? this.state.order : range(Object.keys(this.state.items).length);
+    var items = this.state.firebase.items;
+    var order = this.state.firebase.order;
     var lastPressed = this.state.lastPressed;
     if (isPressed) {
       var mouse = event.pageY - delta;
-      var row = util.clamp(Math.round(mouse / 50), 0, Object.keys(this.state.items).length - 1);
+      var row = util.clamp(Math.round(mouse / 50), 0, Object.keys(items).length - 1);
       var newOrder = util.reinsert(order, order.indexOf(lastPressed), row);
       this.setState({
-        mouse: mouse,
-        order: newOrder
+        mouse: mouse
+      });
+      this.setState({
+        firebase: {order: newOrder}
       });
     }
   }
@@ -194,6 +236,7 @@ class List extends React.Component {
   }
 
   render() {
+    var items = this.state.firebase.items != {} && this.state.firebase.items != 0 ? this.state.firebase.items : {};
     return (
       <div className="container">
         <h1 className="list-header unselectable">{this.state.name}</h1>
@@ -202,10 +245,10 @@ class List extends React.Component {
           <div className="list-container">
             <div className="list">
               <ul>
-                {Object.keys(this.state.items).map(this.renderItem)}
+                {Object.keys(items).map(this.renderItem)}
                 <AddItemBar ref="addItemBar"
                             addItem={this.addItem}
-                            history={this.state.history}
+                            history={this.state.firebase.history}
                             suggestions={this.state.suggestions}
                             highlightIndex={this.state.highlightIndex}
                             suggestionsHover={this.state.suggestionsHover}

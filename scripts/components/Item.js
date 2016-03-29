@@ -58,13 +58,9 @@ class Item extends React.Component {
 
   checkmarkClick() {
     var props = this.props;
-    var key = props.index;
-    var orderIndex = props.orderIndex;
-    this.props.checkItem(key);
+    this.props.checkItem(props.index);
     if (this.props.autoDelete) {
-      setTimeout(function() {
-        props.deleteItem(key, orderIndex);
-      }, 600)
+      props.setDelete(props.index, props.orderIndex);
     }
   }
 
