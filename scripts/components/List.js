@@ -73,7 +73,7 @@ class List extends React.Component {
     var items = this.state.firebase.items;
     var order = this.state.firebase.order;
     var timestamp = (new Date()).getTime();
-    this.state.firebase.items["item-" + timestamp] = item;
+    items["item-" + timestamp] = item;
     if (0 in items) {
       items[0] = null;
     } else {
@@ -118,18 +118,28 @@ class List extends React.Component {
 
   setDelete(key, orderIndex) {
     clearTimeout(deleteTimeout);
+    var deleteList = this.state.deleteList;
     this.setState({
-      deleteList: this.state.deleteList.concat([{key: key, orderIndex: orderIndex}])
+      deleteList: deleteList.concat([{key: key, orderIndex: orderIndex}])
     });
     var self = this;
     deleteTimeout = setTimeout(function() {
-      (self.state.deleteList).map(function(obj) {
-        self.deleteItem(obj.key, obj.orderIndex)
+      console.log(deleteList);
+      deleteList.map(function(obj) {
+        var currentOrderInd = obj.orderIndex;
+        self.deleteItem(obj.key, currentOrderInd);
+        deleteList.map(function(i) {
+          return i.orderIndex > currentOrderInd ? i.orderIndex - 1 : i.orderIndex;
+        });
+        console.log(deleteList);
+      });
+      self.setState({
+        firebase: {items: self.state.firebase.items, order: self.state.firebase.order}
       });
       self.setState({
         deleteList: []
       });
-    }, 600);
+    }, 1600);
   }
 
   deleteItem(key, orderIndex) {
@@ -138,17 +148,25 @@ class List extends React.Component {
     var items = this.state.firebase.items;
     var order = this.state.firebase.order;
     order.splice(order.indexOf(orderIndex), 1);
+    /*console.log(`Initial order: ${order}`);*/
+    /*console.log(`Order index: ${orderIndex}`);*/
     var newOrder = order.map(function(index) {
       return index > orderIndex ? index - 1 : index;
     });
+
+    /*console.log(`New order: ${newOrder}`);*/
+    /*console.log("---");*/
     if (Object.keys(items).length - 1 == 0) {
       items[0] = 0;
       newOrder = {0: 0};
     }
     items[key] = null;
-    this.setState({
-      firebase: {items: items, order: newOrder}
-    });
+    order = newOrder;
+    if (this.state.deleteList.length == 0) {
+      this.setState({
+        firebase: {items: items, order: order}
+      });
+    }
   }
 
   handleTouchStart(event, key, pressLocation) {
