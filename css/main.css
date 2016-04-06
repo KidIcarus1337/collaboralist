@@ -65,6 +65,17 @@ input {
   border-radius: 6px;
 }
 
+.loading-container {
+  width: 100%;
+  height: 80px;
+  position: relative;
+}
+
+.loading-space {
+  width: 50px;
+  height: 50px;
+}
+
 .list {
   position: relative;
   background-color: #4a6063;
@@ -96,15 +107,18 @@ input {
   z-index: 1;
 }
 
-.checkmark-space {
-  width: 30px;
-  height: 30px;
+.checkmark-space, .loading-space {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   margin: auto;
+}
+
+.checkmark-space {
+  width: 30px;
+  height: 30px;
 }
 
 .checkmark {
@@ -154,6 +168,7 @@ input {
   z-index: 0;
   overflow: hidden;
   font-size: 18px;
+  color: #FFE6C2;
 }
 
 .add-item {

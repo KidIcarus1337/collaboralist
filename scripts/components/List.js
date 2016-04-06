@@ -11,6 +11,7 @@ import Rebase  from "re-base";
 var base = Rebase.createClass("https://shopping-list-app-temp.firebaseio.com/");
 
 var deleteTimeout;
+var deleteList = [];
 
 @autobind
 class List extends React.Component {
@@ -24,6 +25,7 @@ class List extends React.Component {
         history: {},
         order: {}
       },
+      loaded: false,
       suggestions: [],
       highlightIndex: 0,
       suggestionsHover: false,
@@ -31,8 +33,7 @@ class List extends React.Component {
       delta: 0,
       mouse: 0,
       isPressed: false,
-      lastPressed: 0,
-      deleteList: []
+      lastPressed: 0
     }
   }
 
@@ -43,13 +44,20 @@ class List extends React.Component {
       then: function() {
         if (Object.keys(this.state.firebase.items).length > 1) {
           this.setState({
-            firebase: {items: {0: null}}
+            firebase: {items: {placeholder: null}, order: {placeholder: null}}
+          });
+        } else {
+          this.setState({
+            firebase: {order: {0: 0, placeholder: null}}
           });
         }
+        this.setState({
+          loaded: true
+        });
       }
     });
     this.setState({
-      firebase: {history: require("../sample-history"), items: {0: 0}, order: {0: 0}}
+      firebase: {items: {placeholder: true}, history: require("../sample-history"), order: {placeholder: true}}
     });
     window.addEventListener('touchmove', this.handleTouchMove);
     window.addEventListener('touchend', this.handleReorderUp);
@@ -74,8 +82,8 @@ class List extends React.Component {
     var order = this.state.firebase.order;
     var timestamp = (new Date()).getTime();
     items["item-" + timestamp] = item;
-    if (0 in items) {
-      items[0] = null;
+    if ("placeholder" in items) {
+      items["placeholder"] = null;
     } else {
       order.push(Object.keys(items).length - 1);
     }
@@ -118,27 +126,19 @@ class List extends React.Component {
 
   setDelete(key, orderIndex) {
     clearTimeout(deleteTimeout);
-    var deleteList = this.state.deleteList;
-    this.setState({
-      deleteList: deleteList.concat([{key: key, orderIndex: orderIndex}])
-    });
+    deleteList.push({key: key, orderIndex: orderIndex});
     var self = this;
     deleteTimeout = setTimeout(function() {
-      console.log(deleteList);
       deleteList.map(function(obj) {
         var currentOrderInd = obj.orderIndex;
         self.deleteItem(obj.key, currentOrderInd);
-        deleteList.map(function(i) {
-          return i.orderIndex > currentOrderInd ? i.orderIndex - 1 : i.orderIndex;
+        deleteList.forEach(function(i) {
+          if (i.orderIndex > currentOrderInd) {
+            i.orderIndex--;
+          }
         });
-        console.log(deleteList);
       });
-      self.setState({
-        firebase: {items: self.state.firebase.items, order: self.state.firebase.order}
-      });
-      self.setState({
-        deleteList: []
-      });
+      deleteList = [];
     }, 1600);
   }
 
@@ -148,25 +148,18 @@ class List extends React.Component {
     var items = this.state.firebase.items;
     var order = this.state.firebase.order;
     order.splice(order.indexOf(orderIndex), 1);
-    /*console.log(`Initial order: ${order}`);*/
-    /*console.log(`Order index: ${orderIndex}`);*/
     var newOrder = order.map(function(index) {
       return index > orderIndex ? index - 1 : index;
     });
-
-    /*console.log(`New order: ${newOrder}`);*/
-    /*console.log("---");*/
     if (Object.keys(items).length - 1 == 0) {
-      items[0] = 0;
-      newOrder = {0: 0};
+      items["placeholder"] = true;
+      newOrder = {"placeholder": true};
     }
     items[key] = null;
     order = newOrder;
-    if (this.state.deleteList.length == 0) {
-      this.setState({
-        firebase: {items: items, order: order}
-      });
-    }
+    this.setState({
+      firebase: {items: items, order: order}
+    });
   }
 
   handleTouchStart(event, key, pressLocation) {
@@ -254,14 +247,46 @@ class List extends React.Component {
   }
 
   render() {
-    var items = this.state.firebase.items != {} && this.state.firebase.items != 0 ? this.state.firebase.items : {};
+    console.log(this.state.firebase.items);
+    var items = this.state.firebase.items != "placeholder" ? this.state.firebase.items : {};
     return (
       <div className="container">
         <h1 className="list-header unselectable">{this.state.name}</h1>
         <div className="list-dashboard">
           {/*<div className="reference-drawer"></div>*/}
           <div className="list-container">
-            <div className="list">
+            <div className="loading-container"
+                 style={{display: this.state.loaded ? "none" : "block"}}>
+              <div className="loading-space"
+                   dangerouslySetInnerHTML={
+                     { __html: `<svg version="1.1"
+                                     id="loader-1"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     xmlns:xlink="http://www.w3.org/1999/xlink"
+                                     x="0px"
+                                     y="0px"
+                                     viewBox="0 0 50 50"
+                                     style="enable-background:new 0 0 50 50;"
+                                     xml:space="preserve">
+                                  <path fill="#FFE6C2"
+                                        d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,
+                                           0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,
+                                           14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
+                                    <animateTransform attributeType="xml"
+                                      attributeName="transform"
+                                      type="rotate"
+                                      from="0 25 25"
+                                      to="360 25 25"
+                                      dur="0.5s"
+                                      repeatCount="indefinite"/>
+                                  </path>
+                                </svg>`
+                     }
+                   }
+              ></div>
+            </div>
+            <div className="list"
+                 style={{display: this.state.loaded ? "block" : "none"}}>
               <ul>
                 {Object.keys(items).map(this.renderItem)}
                 <AddItemBar ref="addItemBar"
