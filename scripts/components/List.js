@@ -12,6 +12,7 @@ var base = Rebase.createClass("https://shopping-list-app-temp.firebaseio.com/");
 
 var deleteTimeout;
 var deleteList = [];
+const orderPlaceholder = 999999999999999;
 
 @autobind
 class List extends React.Component {
@@ -38,17 +39,15 @@ class List extends React.Component {
   }
 
   componentDidMount() {
+    var order = this.state.firebase.order;
     base.syncState(this.props.params.listId, {
       context: this,
       state: "firebase",
       then: function() {
         if (Object.keys(this.state.firebase.items).length > 1) {
+          order[orderPlaceholder] = null;
           this.setState({
-            firebase: {items: {placeholder: null}, order: {placeholder: null}}
-          });
-        } else {
-          this.setState({
-            firebase: {order: {0: 0, placeholder: null}}
+            firebase: {items: {placeholder: null}, order: order}
           });
         }
         this.setState({
@@ -56,8 +55,9 @@ class List extends React.Component {
         });
       }
     });
+    order[orderPlaceholder] = orderPlaceholder;
     this.setState({
-      firebase: {items: {placeholder: true}, history: require("../sample-history"), order: {placeholder: true}}
+      firebase: {items: {placeholder: true}, history: require("../sample-history"), order: order}
     });
     window.addEventListener('touchmove', this.handleTouchMove);
     window.addEventListener('touchend', this.handleReorderUp);
@@ -82,11 +82,13 @@ class List extends React.Component {
     var order = this.state.firebase.order;
     var timestamp = (new Date()).getTime();
     items["item-" + timestamp] = item;
+    var itemsCount = Object.keys(items).length - 1;
     if ("placeholder" in items) {
       items["placeholder"] = null;
-    } else {
-      order.push(Object.keys(items).length - 1);
+      order[orderPlaceholder] = null;
+      itemsCount--;
     }
+    order[itemsCount] = itemsCount;
     this.setState({
       firebase: {items: items, order: order}
     });
@@ -129,14 +131,14 @@ class List extends React.Component {
     deleteList.push({key: key, orderIndex: orderIndex});
     var self = this;
     deleteTimeout = setTimeout(function() {
-      deleteList.map(function(obj) {
+      deleteList.map(function(obj, index) {
         var currentOrderInd = obj.orderIndex;
         self.deleteItem(obj.key, currentOrderInd);
-        deleteList.forEach(function(i) {
-          if (i.orderIndex > currentOrderInd) {
-            i.orderIndex--;
+        for (var i = index; i < deleteList.length; i++) {
+          if (deleteList[i].orderIndex > currentOrderInd) {
+            deleteList[i].orderIndex--;
           }
-        });
+        }
       });
       deleteList = [];
     }, 1600);
@@ -153,7 +155,7 @@ class List extends React.Component {
     });
     if (Object.keys(items).length - 1 == 0) {
       items["placeholder"] = true;
-      newOrder = {"placeholder": true};
+      newOrder[orderPlaceholder] = orderPlaceholder;
     }
     items[key] = null;
     order = newOrder;
@@ -247,8 +249,7 @@ class List extends React.Component {
   }
 
   render() {
-    console.log(this.state.firebase.items);
-    var items = this.state.firebase.items != "placeholder" ? this.state.firebase.items : {};
+    var items = !(this.state.firebase.items.hasOwnProperty("placeholder")) && !(this.state.firebase.order.hasOwnProperty(orderPlaceholder)) ? this.state.firebase.items : {};
     return (
       <div className="container">
         <h1 className="list-header unselectable">{this.state.name}</h1>
