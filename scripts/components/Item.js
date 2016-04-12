@@ -112,7 +112,7 @@ class Item extends React.Component {
               <div className={`checkmark-container ${details.checked ? "unselectable" : ""}`}
                    style={{borderColor: details.checked ? "#99ff8c" : "#cfcfcf"}}
                    onClick={!details.checked ? self.checkmarkClick : null}>
-                <div className="checkmark-space" 
+                <div className="checkmark-space"
                      dangerouslySetInnerHTML={
                        { __html: `<svg version="1.1"
                                        id="Layer_1"

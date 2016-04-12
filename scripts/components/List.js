@@ -26,6 +26,7 @@ class List extends React.Component {
         history: {},
         order: {}
       },
+      listEmpty: true,
       loaded: false,
       suggestions: [],
       highlightIndex: 0,
@@ -48,6 +49,9 @@ class List extends React.Component {
           order[orderPlaceholder] = null;
           this.setState({
             firebase: {items: {placeholder: null}, order: order}
+          });
+          this.setState({
+            listEmpty: false
           });
         }
         this.setState({
@@ -83,10 +87,13 @@ class List extends React.Component {
     var timestamp = (new Date()).getTime();
     items["item-" + timestamp] = item;
     var itemsCount = Object.keys(items).length - 1;
-    if ("placeholder" in items) {
+    if (this.state.listEmpty) {
       items["placeholder"] = null;
       order[orderPlaceholder] = null;
       itemsCount--;
+      this.setState({
+        listEmpty: false
+      });
     }
     order[itemsCount] = itemsCount;
     this.setState({
@@ -154,6 +161,9 @@ class List extends React.Component {
       return index > orderIndex ? index - 1 : index;
     });
     if (Object.keys(items).length - 1 == 0) {
+      this.setState({
+        listEmpty: true
+      });
       items["placeholder"] = true;
       newOrder[orderPlaceholder] = orderPlaceholder;
     }
@@ -249,7 +259,7 @@ class List extends React.Component {
   }
 
   render() {
-    var items = !(this.state.firebase.items.hasOwnProperty("placeholder")) && !(this.state.firebase.order.hasOwnProperty(orderPlaceholder)) ? this.state.firebase.items : {};
+    var items = !(this.state.listEmpty) ? this.state.firebase.items : {};
     return (
       <div className="container">
         <h1 className="list-header unselectable">{this.state.name}</h1>
@@ -258,33 +268,7 @@ class List extends React.Component {
           <div className="list-container">
             <div className="loading-container"
                  style={{display: this.state.loaded ? "none" : "block"}}>
-              <div className="loading-space"
-                   dangerouslySetInnerHTML={
-                     { __html: `<svg version="1.1"
-                                     id="loader-1"
-                                     xmlns="http://www.w3.org/2000/svg"
-                                     xmlns:xlink="http://www.w3.org/1999/xlink"
-                                     x="0px"
-                                     y="0px"
-                                     viewBox="0 0 50 50"
-                                     style="enable-background:new 0 0 50 50;"
-                                     xml:space="preserve">
-                                  <path fill="#FFE6C2"
-                                        d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,
-                                           0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,
-                                           14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z">
-                                    <animateTransform attributeType="xml"
-                                      attributeName="transform"
-                                      type="rotate"
-                                      from="0 25 25"
-                                      to="360 25 25"
-                                      dur="0.5s"
-                                      repeatCount="indefinite"/>
-                                  </path>
-                                </svg>`
-                     }
-                   }
-              ></div>
+              <div className="loading-spinner"></div>
             </div>
             <div className="list"
                  style={{display: this.state.loaded ? "block" : "none"}}>
