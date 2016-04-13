@@ -10,8 +10,16 @@ let utilities = {
     return {itemCount: itemCount, itemName: itemName};
   },
 
-  capitalizeValues(val){
+  capitalizeValues(val) {
     return val.charAt(0).toUpperCase() + val.slice(1);
+  },
+
+  reformatHistory(history) {
+    var newHistory = [];
+    Object.keys(history).forEach(function(name) {
+      newHistory.push({name: name, count: history[name]});
+    });
+    return newHistory;
   },
 
   setInputSelection(input, startPos, endPos) {

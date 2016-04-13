@@ -57,11 +57,16 @@ class List extends React.Component {
         this.setState({
           loaded: true
         });
+        if (Object.keys(this.state.firebase.history).length > 1) {
+          this.setState({
+            firebase: {history: {placeholder: null}}
+          });
+        }
       }
     });
     order[orderPlaceholder] = orderPlaceholder;
     this.setState({
-      firebase: {items: {placeholder: true}, history: require("../sample-history"), order: order}
+      firebase: {items: {placeholder: true}, history: {placeholder: true}, order: order}
     });
     window.addEventListener('touchmove', this.handleTouchMove);
     window.addEventListener('touchend', this.handleReorderUp);
@@ -84,6 +89,7 @@ class List extends React.Component {
   addItem(item) {
     var items = this.state.firebase.items;
     var order = this.state.firebase.order;
+    var history = this.state.firebase.history;
     var timestamp = (new Date()).getTime();
     items["item-" + timestamp] = item;
     var itemsCount = Object.keys(items).length - 1;
@@ -96,8 +102,13 @@ class List extends React.Component {
       });
     }
     order[itemsCount] = itemsCount;
+    var itemName = item.name;
+    history[itemName] = history.hasOwnProperty(itemName) ? history[itemName] + 1 : 1;
+    if (history.hasOwnProperty("placeholder")) {
+      history["placeholder"] = null;
+    }
     this.setState({
-      firebase: {items: items, order: order}
+      firebase: {items: items, order: order, history: history}
     });
   }
 

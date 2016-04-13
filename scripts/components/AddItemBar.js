@@ -16,7 +16,9 @@ class AddItemBar extends React.Component {
   handleOnChange(event) {
     var addItemInput = this.refs.addItem;
     var parsedEntry = util.parseEntry(addItemInput.value);
-    var fuse = new Fuse(this.props.history, {keys: ["name"], id: "name"});
+    var history = JSON.parse(JSON.stringify(this.props.history));
+    history = util.reformatHistory(history);
+    var fuse = new Fuse(history, {keys: ["name"], id: "name"});
     var suggestions = fuse.search(parsedEntry.itemName);
     this.props.populateSuggestions(suggestions);
     var countSpace = !parsedEntry.itemCount ? 0 : parsedEntry.itemCount.toString().length + 1;
