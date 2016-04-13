@@ -10,6 +10,40 @@ input {
   outline: none;
 }
 
+.generator-header, .generator-desc {
+  text-align: center;
+  font-size: 50px;
+}
+
+.generator-header {
+  margin-bottom: 35px;
+  color: #d4a345;
+}
+
+.generator-desc {
+  margin: 0;
+  font-size: 25px;
+  color: #f6bc50;
+}
+
+.divider {
+  margin: 45px 40%;
+  border-bottom: 1px solid #CDCDCD;
+}
+
+.generator-button {
+  width: 40%;
+  margin: 0 auto;
+  padding: 30px 0;
+  border: 2px solid #84adb1;
+  border-radius: 5px;
+  background-color: #f9fffd;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 24px;
+  cursor: pointer;
+}
+
 .grabbable {
   cursor: grab;
   cursor: -moz-grab;
