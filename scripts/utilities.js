@@ -16,7 +16,10 @@ let utilities = {
 
   reformatHistory(history) {
     var newHistory = [];
-    Object.keys(history).forEach(function(name) {
+    if (history.hasOwnProperty("placeholder")) {
+      delete history["placeholder"];
+    }
+    Object.keys(history).map(function(name) {
       newHistory.push({name: name, count: history[name]});
     });
     return newHistory;
