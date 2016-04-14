@@ -15,11 +15,18 @@ class Generator extends React.Component {
     }
   }
 
+  componentDidMount() {
+    window.addEventListener('touchend', this.buttonMouseUp);
+    window.addEventListener('mouseup', this.buttonMouseUp);
+  }
+
   generateList() {
+    window.removeEventListener('touchend', this.buttonMouseUp);
+    window.removeEventListener('mouseup', this.buttonMouseUp);
     var UUID = util.generateUUID();
     this.history.pushState(null, '/list/' + UUID);
   }
-  
+
   buttonMouseOver() {
     this.setState({
       buttonHovered: true
@@ -35,21 +42,27 @@ class Generator extends React.Component {
       buttonPressed: true
     });
   }
+  buttonMouseUp() {
+    this.setState({
+      buttonPressed: false
+    });
+  }
   
   render() {
     return (
-      <div className="container">
+      <div className="container generator-container">
         <h1 className="generator-header">Shopping List App</h1>
         <p className="generator-desc">Generate a new list to get started! Save the link as a bookmark for future reference or share it with others
         for <span>jolly collaboration</span>!</p>
         <div className="divider"></div>
-        <div className="generator-button"
+        <div className="generator-button unselectable"
              onMouseOver={this.buttonMouseOver}
              onMouseOut={this.buttonMouseOut}
              onMouseDown={this.buttonMouseDown}
+             onClick={this.generateList}
              style={{
-                borderColor: this.state.buttonPressed ? "#84adb1" : "#73979A",
-                backgroundColor: this.state.buttonHovered ? "#9BCCD0" : this.state.buttonPressed ? "#DFF5FF" : "#f9fffd"
+                borderColor: this.state.buttonPressed ? "#69898D" : "#73979A",
+                backgroundColor: this.state.buttonPressed ? "#9BCCD0" : this.state.buttonHovered ? "#EFFDFF" : "#f9fffd"
              }}>Generate List</div>
       </div>
     )

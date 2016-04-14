@@ -10,19 +10,48 @@ input {
   outline: none;
 }
 
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+.grabbable {
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.grabbable:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+
+.generator-container {
+  margin-top: 15%;
+  border: 2px solid #84adb1;
+  border-radius: 5px;
+  padding: 35px 0 ;
+  background-color: #fff;
+}
+
 .generator-header, .generator-desc {
   text-align: center;
   font-size: 50px;
 }
 
 .generator-header {
-  margin-bottom: 35px;
+  margin: 0 0 35px 0;
   color: #d4a345;
 }
 
 .generator-desc {
   margin: 0;
-  font-size: 25px;
+  font-size: 22px;
   color: #f6bc50;
 }
 
@@ -44,17 +73,6 @@ input {
   cursor: pointer;
 }
 
-.grabbable {
-  cursor: grab;
-  cursor: -moz-grab;
-  cursor: -webkit-grab;
-}
-.grabbable:active {
-  cursor: grabbing;
-  cursor: -moz-grabbing;
-  cursor: -webkit-grabbing;
-}
-
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   font-style: italic;
   color: #ffe3ba;
@@ -69,16 +87,6 @@ input {
 }
 :-moz-placeholder { /* Firefox 18- */
   font-style: italic;
-}
-
-.unselectable {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  cursor: default;
 }
 
 .list-header {
