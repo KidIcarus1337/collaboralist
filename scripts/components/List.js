@@ -8,7 +8,7 @@ import autobind from 'autobind-decorator';
 
 // Firebase
 import Rebase  from "re-base";
-var base = Rebase.createClass("https://shopping-list-app-temp.firebaseio.com/");
+var base = Rebase.createClass("https://collaboralist.firebaseio.com/");
 
 var deleteTimeout;
 var deleteList = [];
