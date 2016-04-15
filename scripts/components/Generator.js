@@ -51,7 +51,7 @@ class Generator extends React.Component {
   render() {
     return (
       <div className="container generator-container">
-        <h1 className="generator-header">Shopping List App</h1>
+        <h1 className="generator-header">Collaboralist</h1>
         <p className="generator-desc">Generate a new list to get started! Save the link as a bookmark for future reference or share it with others
         for <span>jolly collaboration</span>!</p>
         <div className="divider"></div>
