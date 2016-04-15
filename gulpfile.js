@@ -1,5 +1,6 @@
 var source = require('vinyl-source-stream');
 var gulp = require('gulp');
+var connect = require("gulp-connect");
 var gutil = require('gulp-util');
 var browserify = require('browserify');
 var babelify = require('babelify');
@@ -49,8 +50,21 @@ gulp.task('browser-sync', function() {
         // we need to disable clicks and forms for when we test multiple rooms
         server : {},
         middleware : [ historyApiFallback() ],
-        ghostMode: false
+        ghostMode: false,
+        notify: false
     });
+});
+
+/*
+  Production Server
+ */
+gulp.task('serveprod', function() {
+  connect.server({
+    root: ["."],
+    port: process.env.PORT || 5000, // localhost:5000
+    middleware : function(connect, opt) {return [ historyApiFallback() ]},
+    livereload: false
+  });
 });
 
 function handleErrors() {
@@ -104,6 +118,11 @@ gulp.task('scripts', function() {
 
 // run 'scripts' task first, then watch for future changes
 gulp.task('default', ['images','styles','scripts','browser-sync'], function() {
+  gulp.watch('css/**', ['styles']); // gulp watch for stylus changes
+  return buildScript('main.js', true); // browserify watch for JS changes
+});
+
+gulp.task('deploy', ['images','styles','scripts', 'serveprod'], function() {
   gulp.watch('css/**', ['styles']); // gulp watch for stylus changes
   return buildScript('main.js', true); // browserify watch for JS changes
 });
