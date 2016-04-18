@@ -29,7 +29,7 @@ gulp.task('styles',function() {
   var gulpChain = gulp.src(['css/main.css', 'node_modules/bootstrap/dist/css/bootstrap.min.css'])
     .pipe(autoprefixer())
     .pipe(gulp.dest('build/css'));
-  if (typeof reload === "undefined") {
+  if (typeof reload !== "undefined") {
     gulpChain.pipe(reload({stream: true}));
   }
 });
@@ -101,7 +101,7 @@ function buildScript(file, watch) {
       // .pipe(uglify())
       // .pipe(rename('app.min.js'))
       // .pipe(gulp.dest('./build'))
-    if (typeof reload === "undefined") {
+    if (typeof reload !== "undefined") {
       gulpChain.pipe(reload({stream: true}));
     }
     return gulpChain;
