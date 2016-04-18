@@ -13,9 +13,13 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var buffer = require('vinyl-buffer');
 
-var reload = browserSync.reload;
 var historyApiFallback = require('connect-history-api-fallback');
 
+function checkReload() {
+  if (typeof reload !== "undefined") {
+    return reload({stream:true});
+  }
+}
 
 /*
   Styles Task
@@ -30,7 +34,7 @@ gulp.task('styles',function() {
   gulp.src(['css/main.css', 'node_modules/bootstrap/dist/css/bootstrap.min.css'])
     .pipe(autoprefixer())
     .pipe(gulp.dest('build/css'))
-    .pipe(reload({stream:true}))
+    .pipe(checkReload())
 });
 
 /*
@@ -46,6 +50,7 @@ gulp.task('images',function(){
 */
 gulp.task('browser-sync', function() {
   var browserSync = require('browser-sync');
+  var reload = browserSync.reload;
     browserSync({
         // we need to disable clicks and forms for when we test multiple rooms
         server : {},
@@ -99,7 +104,7 @@ function buildScript(file, watch) {
       // .pipe(uglify())
       // .pipe(rename('app.min.js'))
       // .pipe(gulp.dest('./build'))
-      .pipe(reload({stream:true}))
+      .pipe(checkReload())
   }
 
   // listen for an update and run rebundle
