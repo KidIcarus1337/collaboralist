@@ -13,7 +13,6 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var buffer = require('vinyl-buffer');
 
-var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 var historyApiFallback = require('connect-history-api-fallback');
 
@@ -46,6 +45,7 @@ gulp.task('images',function(){
   Browser Sync
 */
 gulp.task('browser-sync', function() {
+  var browserSync = require('browser-sync');
     browserSync({
         // we need to disable clicks and forms for when we test multiple rooms
         server : {},
