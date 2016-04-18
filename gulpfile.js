@@ -15,11 +15,6 @@ var buffer = require('vinyl-buffer');
 
 var historyApiFallback = require('connect-history-api-fallback');
 
-function checkReload() {
-  if (typeof reload !== "undefined") {
-    return reload({stream:true});
-  }
-}
 
 /*
   Styles Task
@@ -31,10 +26,16 @@ gulp.task('styles',function() {
     .pipe(gulp.dest('build/fonts'));
 
   // Compile CSS
-  gulp.src(['css/main.css', 'node_modules/bootstrap/dist/css/bootstrap.min.css'])
-    .pipe(autoprefixer())
-    .pipe(gulp.dest('build/css'))
-    .pipe(checkReload())
+  if (typeof reload === "undefined") {
+    gulp.src(['css/main.css', 'node_modules/bootstrap/dist/css/bootstrap.min.css'])
+      .pipe(autoprefixer())
+      .pipe(gulp.dest('build/css'))
+  } else {
+    gulp.src(['css/main.css', 'node_modules/bootstrap/dist/css/bootstrap.min.css'])
+      .pipe(autoprefixer())
+      .pipe(gulp.dest('build/css'))
+      .pipe(reload({stream:true}))
+  }
 });
 
 /*
@@ -95,16 +96,28 @@ function buildScript(file, watch) {
 
   function rebundle() {
     var stream = bundler.bundle();
-    return stream
-      .on('error', handleErrors)
-      .pipe(source(file))
-      .pipe(gulp.dest('./build/'))
-      // If you also want to uglify it
-      // .pipe(buffer())
-      // .pipe(uglify())
-      // .pipe(rename('app.min.js'))
-      // .pipe(gulp.dest('./build'))
-      .pipe(checkReload())
+    if (typeof reload === "undefined") {
+      return stream
+        .on('error', handleErrors)
+        .pipe(source(file))
+        .pipe(gulp.dest('./build/'));
+        // If you also want to uglify it
+        // .pipe(buffer())
+        // .pipe(uglify())
+        // .pipe(rename('app.min.js'))
+        // .pipe(gulp.dest('./build'))
+    } else {
+      return stream
+        .on('error', handleErrors)
+        .pipe(source(file))
+        .pipe(gulp.dest('./build/'))
+        // If you also want to uglify it
+        // .pipe(buffer())
+        // .pipe(uglify())
+        // .pipe(rename('app.min.js'))
+        // .pipe(gulp.dest('./build'))
+        .pipe(reload({stream:true}))
+    }
   }
 
   // listen for an update and run rebundle
