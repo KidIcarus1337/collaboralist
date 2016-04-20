@@ -100,8 +100,10 @@ class Item extends React.Component {
           y: spring((order.indexOf(orderIndex) - initialOrder.indexOf(orderIndex)) * 50, springConfig)
         };
 
+    var windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
     var details = this.props.details;
     var self = this;
+    console.log(windowWidth);
     return (
       <Motion style={style} key={orderIndex}>
         {({scale, shadow, y}) =>
@@ -158,7 +160,8 @@ class Item extends React.Component {
                 <span className="glyphicon glyphicon-menu-hamburger"
                       style={{opacity: this.state.reorderHovered || this.state.reorderPressed ? 0.6 : 0.2,
                               display: (this.state.itemHovered || this.state.reorderPressed) &&
-                              !(details.checked && this.props.autoDelete) ? "initial" : "none"}} />
+                              !(details.checked && this.props.autoDelete) ||
+                              windowWidth <= 767 ? "initial" : "none"}} />
               </div>
             </div>
           </li>
