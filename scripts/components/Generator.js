@@ -1,4 +1,5 @@
 import React from "react";
+import Footer from "./Footer";
 import { History } from 'react-router';
 import reactMixin from 'react-mixin';
 import util from "../utilities";
@@ -50,20 +51,23 @@ class Generator extends React.Component {
   
   render() {
     return (
-      <div className="container generator-container">
-        <h1 className="generator-header">Collaboralist</h1>
-        <p className="generator-desc">Generate a new list to get started! Save the link as a bookmark for future reference or share it with others
-        for <span>jolly collaboration</span>!</p>
-        <div className="divider"></div>
-        <div className="generator-button unselectable"
-             onMouseOver={this.buttonMouseOver}
-             onMouseOut={this.buttonMouseOut}
-             onMouseDown={this.buttonMouseDown}
-             onClick={this.generateList}
-             style={{
-                borderColor: this.state.buttonPressed ? "#69898D" : "#73979A",
-                backgroundColor: this.state.buttonPressed ? "#9BCCD0" : this.state.buttonHovered ? "#EFFDFF" : "#f9fffd"
-             }}>Generate List</div>
+      <div className="component-wrapper">
+        <div className="container generator-container">
+          <h1 className="generator-header">Collaboralist</h1>
+          <p className="generator-desc">Generate a new list to get started! Save the link as a bookmark for future reference or share it with others
+          for <span>jolly collaboration</span>!</p>
+          <div className="generator-divider"></div>
+          <div className="generator-button unselectable"
+               onMouseOver={this.buttonMouseOver}
+               onMouseOut={this.buttonMouseOut}
+               onMouseDown={this.buttonMouseDown}
+               onClick={this.generateList}
+               style={{
+                  borderColor: this.state.buttonPressed ? "#69898D" : "#73979A",
+                  backgroundColor: this.state.buttonPressed ? "#9BCCD0" : this.state.buttonHovered ? "#EFFDFF" : "#f9fffd"
+               }}>Generate List</div>
+        </div>
+        <Footer />
       </div>
     )
   }

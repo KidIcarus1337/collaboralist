@@ -2,6 +2,7 @@ import React from "react";
 import Item from "./Item"
 import AddItemBar from "./AddItemBar";
 import SearchSuggestions from "./SearchSuggestions";
+import Footer from "./Footer";
 import range from 'lodash.range';
 import util from "../utilities";
 import autobind from 'autobind-decorator';
@@ -133,7 +134,7 @@ class List extends React.Component {
             lastPressed={this.state.lastPressed}
             orderIndex={orderIndex}
             handleReorderStart={this.handleReorderStart}
-            onTouchStart={this.handleTouchStart}/>
+            handleTouchStart={this.handleTouchStart}/>
     )
   }
 
@@ -303,6 +304,7 @@ class List extends React.Component {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     )
   }

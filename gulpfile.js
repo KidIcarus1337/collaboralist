@@ -13,12 +13,40 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var buffer = require('vinyl-buffer');
 
+var reload;
 var historyApiFallback = require('connect-history-api-fallback');
 
 
 /*
   Styles Task
 */
+
+/*
+  Browser Sync
+*/
+gulp.task('browser-sync', function() {
+  var browserSync = require('browser-sync');
+  reload = browserSync.reload;
+    browserSync({
+        // we need to disable clicks and forms for when we test multiple rooms
+        server : {},
+        middleware : [ historyApiFallback() ],
+        ghostMode: false,
+        notify: false
+    });
+});
+
+/*
+  Production Server
+ */
+gulp.task('serveprod', function() {
+  connect.server({
+    root: ["."],
+    port: process.env.PORT || 5000, // localhost:5000
+    middleware : function(connect, opt) {return [ historyApiFallback() ]},
+    livereload: false
+  });
+});
 
 gulp.task('styles',function() {
   // Compile fonts
@@ -42,32 +70,6 @@ gulp.task('images',function(){
     .pipe(gulp.dest('build/images'))
 });
 
-/*
-  Browser Sync
-*/
-gulp.task('browser-sync', function() {
-  var browserSync = require('browser-sync');
-  var reload = browserSync.reload;
-    browserSync({
-        // we need to disable clicks and forms for when we test multiple rooms
-        server : {},
-        middleware : [ historyApiFallback() ],
-        ghostMode: false,
-        notify: false
-    });
-});
-
-/*
-  Production Server
- */
-gulp.task('serveprod', function() {
-  connect.server({
-    root: ["."],
-    port: process.env.PORT || 5000, // localhost:5000
-    middleware : function(connect, opt) {return [ historyApiFallback() ]},
-    livereload: false
-  });
-});
 
 function handleErrors() {
   var args = Array.prototype.slice.call(arguments);

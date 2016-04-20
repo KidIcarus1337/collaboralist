@@ -2,7 +2,14 @@
   /* Reserved for grabbing cursor */
 }
 
+html {
+  height: 100%;
+}
+
 body {
+  position: relative;
+  min-height: 100%;
+  padding-bottom: 100px;
   background: url("../images/background-lines.png")
 }
 
@@ -31,8 +38,11 @@ input {
   cursor: -webkit-grabbing;
 }
 
+.component-wrapper {
+  padding-top: 10%;
+}
+
 .generator-container {
-  margin-top: 10%;
   border: 2px solid #84adb1;
   border-radius: 5px;
   padding: 35px 0 ;
@@ -55,7 +65,7 @@ input {
   color: #f6bc50;
 }
 
-.divider {
+.generator-divider {
   margin: 45px 40%;
   border-bottom: 1px solid #CDCDCD;
 }
@@ -265,4 +275,59 @@ input {
 
 .suggestion-highlight {
   background-color: #b0e8ec !important;
+}
+
+.footer {
+  position: absolute;
+  padding-bottom: 10px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.footer-divider {
+  margin: 5px 40%;
+  border-bottom: 1px solid #d1d1d1;
+}
+
+/*
+  Media queries
+*/
+@media (max-width: 767px) {
+  body {
+    background: #fff;
+  }
+
+  .container {
+    margin: 0;
+    padding: 0 !important;
+    width: 100%;
+  }
+
+  .generator-container {
+    border: none;
+  }
+
+  .generator-button {
+    width: 70%;
+  }
+
+  .list-header {
+    margin-top: 0.2em;
+  }
+
+  .list-container {
+    border: none;
+  }
+
+  .list {
+    margin: 0;
+    border-left: 0;
+    border-right: 0;
+  }
 }

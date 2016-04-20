@@ -44,6 +44,12 @@ class Item extends React.Component {
     });
   }
 
+  reorderTouchStart(event, orderIndex, order) {
+    this.setState({
+      reorderPressed: true
+    });
+    this.props.handleTouchStart(event, orderIndex, order.indexOf(orderIndex) * 50);
+  }
   reorderMouseDown(event, orderIndex, order) {
     this.setState({
       reorderPressed: true
@@ -147,7 +153,8 @@ class Item extends React.Component {
               <div className={`reorder-button ${!(details.checked && this.props.autoDelete) ? "grabbable" : ""}`}
                    onMouseOver={!(details.checked && this.props.autoDelete) ? this.reorderMouseOver : null}
                    onMouseOut={!(details.checked && this.props.autoDelete) ? this.reorderMouseOut : null}
-                   onMouseDown={!(details.checked && this.props.autoDelete) ? function(event) {self.reorderMouseDown(event, orderIndex, order)} : null}>
+                   onMouseDown={!(details.checked && this.props.autoDelete) ? function(event) {self.reorderMouseDown(event, orderIndex, order)} : null}
+                   onTouchStart={!(details.checked && this.props.autoDelete) ? function(event) {self.reorderTouchStart(event, orderIndex, order)} : null}>
                 <span className="glyphicon glyphicon-menu-hamburger"
                       style={{opacity: this.state.reorderHovered || this.state.reorderPressed ? 0.6 : 0.2,
                               display: (this.state.itemHovered || this.state.reorderPressed) &&
