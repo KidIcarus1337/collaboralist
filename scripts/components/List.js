@@ -229,8 +229,8 @@ class List extends React.Component {
     scrollPosition = window.scrollY;
     if (touchY >= 0 && touchY < scrollPosition + scrollBuffer) {
       scrollChange = touchY - (scrollPosition + scrollBuffer);
-    } else if (touchY >=0 && touchY > windowHeight - scrollBuffer) {
-      scrollChange = touchY - (windowHeight - scrollBuffer);
+    } else if (touchY >=0 && touchY > windowHeight + scrollPosition - scrollBuffer) {
+      scrollChange = touchY - (windowHeight + scrollPosition - scrollBuffer);
     }
     if (scrollChange !== 0) {
       var newScroll = scrollPosition + scrollSpeed * scrollChange;
