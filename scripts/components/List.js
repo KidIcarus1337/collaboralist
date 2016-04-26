@@ -14,6 +14,12 @@ var base = Rebase.createClass("https://collaboralist.firebaseio.com/");
 var deleteTimeout;
 var deleteList = [];
 const orderPlaceholder = 999999999999999;
+var scrollInterval;
+const scrollBuffer = 80;
+const scrollSpeed = 0.2;
+var touchY;
+var scrollPosition;
+var windowHeight;
 
 @autobind
 class List extends React.Component {
@@ -187,12 +193,16 @@ class List extends React.Component {
   }
 
   handleTouchStart(event, key, pressLocation) {
+    this.initAutoScroll();
+    scrollInterval = setInterval(this.autoScroll, 20);
     this.handleReorderStart(event.touches[0], key, pressLocation);
   }
 
   handleTouchMove(event) {
-    event.preventDefault();
-    this.handleReorderMove(event.touches[0]);
+    if (this.state.isPressed) {
+      event.preventDefault();
+      this.handleReorderMove(event.touches[0]);
+    }
   }
 
   handleReorderStart(event, pos, pressY) {
@@ -209,12 +219,37 @@ class List extends React.Component {
     });
   }
 
+  initAutoScroll() {
+    touchY = -1;
+    windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+  }
+
+  autoScroll() {
+    var scrollChange = 0;
+    scrollPosition = window.scrollY;
+    if (touchY >= 0 && touchY < scrollPosition + scrollBuffer) {
+      scrollChange = touchY - (scrollPosition + scrollBuffer);
+    } else if (touchY >=0 && touchY > windowHeight - scrollBuffer) {
+      scrollChange = touchY - (windowHeight - scrollBuffer);
+    }
+    if (scrollChange !== 0) {
+      var newScroll = scrollPosition + scrollSpeed * scrollChange;
+      if (newScroll < 0) {
+        newScroll = 0;
+      } else if (newScroll > windowHeight) {
+        newScroll = windowHeight;
+      }
+      window.scrollTo(0, newScroll);
+    }
+  }
+
   handleReorderMove(event) {
     var isPressed = this.state.isPressed;
     var delta = this.state.delta;
     var items = this.state.firebase.items;
     var order = this.state.firebase.order;
     var lastPressed = this.state.lastPressed;
+    touchY = event.pageY;
     if (isPressed) {
       var mouse = event.pageY - delta;
       var row = util.clamp(Math.round(mouse / 50), 0, Object.keys(items).length - 1);
@@ -239,6 +274,7 @@ class List extends React.Component {
       isPressed: false,
       delta: 0
     });
+    clearInterval(scrollInterval);
   }
 
   populateSuggestions(suggestions) {
