@@ -53,10 +53,8 @@ class Generator extends React.Component {
     return (
       <div className="component-wrapper">
         <div className="container generator-container">
-          <h1 className="generator-header">Collaboralist</h1>
-          <p className="generator-desc">Generate a new list to get started! Save the link as a bookmark for future reference or share it with others
-          for <span>jolly collaboration</span>!</p>
-          <div className="generator-divider"></div>
+          <h1 className="generator-header logo">Collaboralist</h1>
+          <p className="generator-desc">A simple web app for online, persistent shopping lists.</p>
           <div className="generator-button unselectable"
                onMouseOver={this.buttonMouseOver}
                onMouseOut={this.buttonMouseOut}
@@ -66,6 +64,22 @@ class Generator extends React.Component {
                   borderColor: this.state.buttonPressed ? "#69898D" : "#73979A",
                   backgroundColor: this.state.buttonPressed ? "#9BCCD0" : this.state.buttonHovered ? "#EFFDFF" : "#f9fffd"
                }}>Generate List</div>
+          <div className="generator-divider"></div>
+          <h1 className="generator-instruct-header">Nothing To It!</h1>
+          <ul className="generator-instruct">
+            <li>
+              <h2>1 • Create your list</h2>
+              <p>Using the button will generate a unique URL that points to your list.</p>
+            </li>
+            <li>
+              <h2>2 • Save your link</h2>
+              <p></p>
+            </li>
+            <li>
+              <h2>3 • Share it</h2>
+              <p></p>
+            </li>
+          </ul>
         </div>
         <Footer />
       </div>

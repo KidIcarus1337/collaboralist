@@ -6,9 +6,11 @@ import Footer from "./Footer";
 import range from 'lodash.range';
 import util from "../utilities";
 import autobind from 'autobind-decorator';
+import { History } from 'react-router';
+import reactMixin from 'react-mixin';
 
 // Firebase
-import Rebase  from "re-base";
+import Rebase from "re-base";
 var base = Rebase.createClass("https://collaboralist.firebaseio.com/");
 
 var deleteTimeout;
@@ -46,6 +48,14 @@ class List extends React.Component {
       lastPressed: 0
     }
   }
+
+  /*componentWillMount() {
+    base.once("value", function (snapshot) {
+      if (!(snapshot.child(this.props.params.listId).exists())) {
+        this.history.pushState(null, "/fourohfoured");
+      }
+    });
+  }*/
 
   componentDidMount() {
     var order = this.state.firebase.order;
@@ -347,5 +357,7 @@ class List extends React.Component {
     )
   }
 }
+
+reactMixin.onClass(List, History);
 
 export default List;

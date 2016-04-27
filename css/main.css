@@ -10,11 +10,18 @@ body {
   position: relative;
   min-height: 100%;
   padding-bottom: 100px;
-  background: url("../images/background-lines.png")
+  background: url("../images/background-lines.png");
+  font-family: 'Alegreya Sans', sans-serif !important;
 }
 
 input {
   outline: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .unselectable {
@@ -38,6 +45,10 @@ input {
   cursor: -webkit-grabbing;
 }
 
+.logo {
+  font-family: 'Bad Script', cursive;
+}
+
 .component-wrapper {
   padding-top: 10%;
 }
@@ -45,7 +56,7 @@ input {
 .generator-container {
   border: 2px solid #84adb1;
   border-radius: 5px;
-  padding: 35px 0 ;
+  padding: 35px 9em !important;
   background-color: #fff;
 }
 
@@ -55,24 +66,24 @@ input {
 }
 
 .generator-header {
-  margin: 0 0 35px 0;
+  margin: 0 0 20px 0;
   color: #d4a345;
 }
 
 .generator-desc {
   margin: 0;
-  font-size: 22px;
+  font-size: 20px;
   color: #f6bc50;
 }
 
 .generator-divider {
-  margin: 45px 40%;
+  margin: 35px 0;
   border-bottom: 1px solid #CDCDCD;
 }
 
 .generator-button {
-  width: 40%;
-  margin: 0 auto;
+  width: 55%;
+  margin: 40px auto 0;
   padding: 30px 0;
   border: 2px solid #84adb1;
   border-radius: 5px;
@@ -80,7 +91,18 @@ input {
   text-transform: uppercase;
   text-align: center;
   font-size: 24px;
+  font-family: 'Ubuntu Condensed', sans-serif;
   cursor: pointer;
+}
+
+.generator-instruct-header {
+  font-size: 50px;
+  text-align: center;
+  color: #f6bc50;
+}
+
+.generator-instruct {
+
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
@@ -103,7 +125,7 @@ input {
   margin-top: 1em;
   color: #84adb1;
   text-align: center;
-  font-size: 50px;
+  font-size: 62px;
 }
 
 .list-dashboard {
@@ -147,12 +169,6 @@ input {
   border-top: 1px solid #cfcfcf;
   border-left: 1px solid #cfcfcf;
   border-right: 1px solid #cfcfcf;
-}
-
-.list ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 
 .list-item, .add-item-bar {
@@ -222,6 +238,10 @@ input {
   margin: auto;
 }
 
+.item-text, .add-item, .suggestion {
+  font-size: 21px;
+}
+
 .item-text {
   height: 100%;
   width: 100%;
@@ -230,7 +250,6 @@ input {
   border: none;
   z-index: 0;
   overflow: hidden;
-  font-size: 18px;
   color: #f6bc50;
 }
 
@@ -242,7 +261,6 @@ input {
   border: none;
   box-shadow: inset 0 1px 1px rgba(0,0,0,0.3);
   overflow: hidden;
-  font-size: 18px;
   color: #f6bc50;
 }
 
@@ -253,6 +271,7 @@ input {
   border-right: 2px solid #84adb1;
   border-bottom: 2px solid #84adb1;
   background: #fff;
+  z-index: 1;
 }
 
 .suggestions-header {
@@ -262,11 +281,11 @@ input {
   color: #ac8438;
   text-align: left;
   text-transform: uppercase;
+  font-size: 22px;
 }
 
 .suggestion {
   padding: 4px 0 4px 60px;
-  font-size: 18px;
   color: #f6bc50;
 }
 .suggestion:hover {
@@ -284,6 +303,7 @@ input {
   bottom: 0;
   left: 0;
   text-align: center;
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 .footer p {
@@ -313,12 +333,32 @@ input {
     border: none;
   }
 
+  .generator-header {
+    margin-bottom: 20px;
+  }
+
+  .generator-desc {
+    font-size: 18px;
+    padding: 0 10px;
+  }
+
+  .generator-divider {
+    margin: 25px 40%;
+  }
+
   .generator-button {
-    width: 70%;
+    width: 60%;
+    padding: 18px 0;
+    font-size: 24px;
   }
 
   .list-header {
     margin-top: 0.2em;
+    font-size: 55px;
+  }
+
+  .list-dashboard {
+    max-width: none;
   }
 
   .list-container {
@@ -329,5 +369,9 @@ input {
     margin: 0;
     border-left: 0;
     border-right: 0;
+  }
+
+  .item-text, .add-item, .suggestion {
+    font-size: 20px;
   }
 }
