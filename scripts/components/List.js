@@ -20,6 +20,7 @@ const scrollSpeed = 0.2;
 var touchY;
 var scrollPosition;
 var windowHeight;
+var docHeight;
 
 @autobind
 class List extends React.Component {
@@ -222,6 +223,7 @@ class List extends React.Component {
   initAutoScroll() {
     touchY = -1;
     windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    docHeight = util.getDocHeight() - windowHeight;
   }
 
   autoScroll() {
@@ -236,8 +238,8 @@ class List extends React.Component {
       var newScroll = scrollPosition + scrollSpeed * scrollChange;
       if (newScroll < 0) {
         newScroll = 0;
-      } else if (newScroll > windowHeight) {
-        newScroll = windowHeight;
+      } else if (newScroll > docHeight) {
+        newScroll = docHeight;
       }
       window.scrollTo(0, newScroll);
     }
