@@ -50,7 +50,7 @@ ul {
 }
 
 .component-wrapper {
-  padding-top: 10%;
+  padding-top: 5%;
 }
 
 .generator-container {
@@ -91,7 +91,7 @@ ul {
   text-transform: uppercase;
   text-align: center;
   font-size: 24px;
-  font-family: 'Ubuntu Condensed', sans-serif;
+  font-family: 'Raleway', sans-serif;
   cursor: pointer;
 }
 
@@ -101,8 +101,8 @@ ul {
   color: #f6bc50;
 }
 
-.generator-instruct {
-
+.generator-instruct p {
+  font-size: 16px;
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */

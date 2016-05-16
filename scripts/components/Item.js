@@ -25,6 +25,12 @@ class Item extends React.Component {
     window.addEventListener("resize", this.getWindowWidth);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('touchend', this.reorderMouseUp);
+    window.removeEventListener('mouseup', this.reorderMouseUp);
+    window.removeEventListener("resize", this.getWindowWidth);
+  }
+
   getWindowWidth() {
     this.setState({
       windowWidth: Math.max(document.documentElement.clientWidth, window.innerWidth || 0)

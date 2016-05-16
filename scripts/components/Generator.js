@@ -68,16 +68,16 @@ class Generator extends React.Component {
           <h1 className="generator-instruct-header">Nothing To It!</h1>
           <ul className="generator-instruct">
             <li>
-              <h2>1 • Create your list</h2>
-              <p>Using the button will generate a unique URL that points to your list.</p>
+              <h2>1 • Create a list</h2>
+              <p>This generates a unique URL.</p>
             </li>
             <li>
               <h2>2 • Save your link</h2>
-              <p></p>
+              <p>Make a bookmark of your list to ensure that you never lose it.</p>
             </li>
             <li>
               <h2>3 • Share it</h2>
-              <p></p>
+              <p>Send the link to others to view and edit the list simultaneously.</p>
             </li>
           </ul>
         </div>

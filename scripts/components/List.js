@@ -13,6 +13,7 @@ import reactMixin from 'react-mixin';
 import Rebase from "re-base";
 var base = Rebase.createClass("https://collaboralist.firebaseio.com/");
 
+var validUUID = true;
 var deleteTimeout;
 var deleteList = [];
 const orderPlaceholder = 999999999999999;
@@ -49,47 +50,57 @@ class List extends React.Component {
     }
   }
 
-  /*componentWillMount() {
-    base.once("value", function (snapshot) {
-      if (!(snapshot.child(this.props.params.listId).exists())) {
-        this.history.pushState(null, "/fourohfoured");
-      }
-    });
-  }*/
+  componentWillMount() {
+    var re = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!(re.test(this.props.params.listId))) {
+      validUUID = false;
+      this.props.history.pushState(null, "/fourohfoured");
+    }
+  }
 
   componentDidMount() {
-    var order = this.state.firebase.order;
-    base.syncState(this.props.params.listId, {
-      context: this,
-      state: "firebase",
-      then: function() {
-        if (Object.keys(this.state.firebase.items).length > 1) {
-          order[orderPlaceholder] = null;
+    if (validUUID) {
+      var order = this.state.firebase.order;
+      base.syncState(this.props.params.listId, {
+        context: this,
+        state: "firebase",
+        then: function() {
+          console.log("blah");
+          if (Object.keys(this.state.firebase.items).length > 1) {
+            order[orderPlaceholder] = null;
+            this.setState({
+              firebase: {items: {placeholder: null}, order: order}
+            });
+            this.setState({
+              listEmpty: false
+            });
+          }
           this.setState({
-            firebase: {items: {placeholder: null}, order: order}
+            loaded: true
           });
-          this.setState({
-            listEmpty: false
-          });
+          if (Object.keys(this.state.firebase.history).length > 1) {
+            this.setState({
+              firebase: {history: {placeholder: null}}
+            });
+          }
         }
-        this.setState({
-          loaded: true
-        });
-        if (Object.keys(this.state.firebase.history).length > 1) {
-          this.setState({
-            firebase: {history: {placeholder: null}}
-          });
-        }
-      }
-    });
-    order[orderPlaceholder] = orderPlaceholder;
-    this.setState({
-      firebase: {items: {placeholder: true}, history: {placeholder: true}, order: order}
-    });
-    window.addEventListener('touchmove', this.handleTouchMove);
-    window.addEventListener('touchend', this.handleReorderUp);
-    window.addEventListener('mousemove', this.handleReorderMove);
-    window.addEventListener('mouseup', this.handleReorderUp);
+      });
+      order[orderPlaceholder] = orderPlaceholder;
+      this.setState({
+        firebase: {items: {placeholder: true}, history: {placeholder: true}, order: order}
+      });
+      window.addEventListener('touchmove', this.handleTouchMove);
+      window.addEventListener('touchend', this.handleReorderUp);
+      window.addEventListener('mousemove', this.handleReorderMove);
+      window.addEventListener('mouseup', this.handleReorderUp);
+    }
+  }
+  
+  componentWillUnmount() {
+    window.removeEventListener('touchmove', this.handleTouchMove);
+    window.removeEventListener('touchend', this.handleReorderUp);
+    window.removeEventListener('mousemove', this.handleReorderMove);
+    window.removeEventListener('mouseup', this.handleReorderUp);
   }
 
   updateItem(key, entry, orderIndex) {
@@ -181,8 +192,6 @@ class List extends React.Component {
   }
 
   deleteItem(key, orderIndex) {
-    window.removeEventListener('touchend', this.refs[key].reorderMouseUp);
-    window.removeEventListener('mouseup', this.refs[key].reorderMouseUp);
     var items = this.state.firebase.items;
     var order = this.state.firebase.order;
     order.splice(order.indexOf(orderIndex), 1);
