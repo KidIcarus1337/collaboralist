@@ -1,7 +1,5 @@
 import React from "react";
 import Footer from "./Footer";
-import { History } from 'react-router';
-import reactMixin from 'react-mixin';
 import util from "../utilities";
 import autobind from 'autobind-decorator';
 
@@ -20,6 +18,12 @@ class Generator extends React.Component {
     window.addEventListener('touchend', this.buttonMouseUp);
     window.addEventListener('mouseup', this.buttonMouseUp);
   }
+
+  submitContactForm() {
+  window.location.replace(
+    window.location.pathname + window.location.search + '#/contacts'
+  );
+}
 
   generateList() {
     window.removeEventListener('touchend', this.buttonMouseUp);
@@ -86,7 +90,5 @@ class Generator extends React.Component {
     )
   }
 }
-
-reactMixin.onClass(Generator, History);
 
 export default Generator;
