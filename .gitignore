@@ -32,9 +32,6 @@ node_modules
 # Optional REPL history
 .node_repl_history
 
-# Gulp build
-build
-
 # Miscellaneous
 .DS_Store
 .idea
