@@ -353,9 +353,21 @@ ul {
   }
 
   .generator-button {
-    width: 60%;
+    width: 80%;
     padding: 18px 0;
     font-size: 24px;
+  }
+
+  .generator-instruct-header {
+    font-size: 40px;
+  }
+
+  .generator-instruct {
+    padding: 0 2em;
+  }
+
+  .generator-instruct h2 {
+    font-size: 26px;
   }
 
   .list-header {
