@@ -18,18 +18,23 @@ class Generator extends React.Component {
     window.addEventListener('touchend', this.buttonMouseUp);
     window.addEventListener('mouseup', this.buttonMouseUp);
   }
-
-  submitContactForm() {
-  window.location.replace(
-    window.location.pathname + window.location.search + '#/contacts'
-  );
-}
+  
+  componentWillUnmount() {
+    window.removeEventListener('touchend', this.buttonMouseUp);
+    window.removeEventListener('mouseup', this.buttonMouseUp);
+  }
+  
+  redirect(UUID) {
+    window.location.replace(
+      window.location.pathname + window.location.search + "#/list/" + UUID
+    );
+  }
 
   generateList() {
     window.removeEventListener('touchend', this.buttonMouseUp);
     window.removeEventListener('mouseup', this.buttonMouseUp);
     var UUID = util.generateUUID();
-    this.history.pushState(null, '/list/' + UUID);
+    this.redirect(UUID);
   }
 
   buttonMouseOver() {
