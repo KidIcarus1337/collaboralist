@@ -296,6 +296,28 @@ ul {
   background-color: #b0e8ec !important;
 }
 
+.error-header {
+  text-align: center;
+}
+
+.error-container h1 {
+  margin-bottom: 0;
+  font-size: 80px;
+  color: #84adb1;
+}
+
+.error-container h2 {
+  margin: 10px 0 0;
+  font-size: 35px;
+  color: #f6bc50;
+}
+
+.error-desc {
+  margin-top: 50px;
+  padding: 0 12em;
+  font-size: 20px;
+}
+
 .footer {
   position: absolute;
   padding-bottom: 10px;
@@ -385,5 +407,9 @@ ul {
 
   .item-text, .add-item, .suggestion {
     font-size: 20px;
+  }
+
+  .error-desc {
+    padding: 0 2em;
   }
 }
