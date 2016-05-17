@@ -18,10 +18,6 @@ var historyApiFallback = require('connect-history-api-fallback');
 
 
 /*
-  Styles Task
-*/
-
-/*
   Browser Sync
 */
 gulp.task('browser-sync', function() {
@@ -37,17 +33,8 @@ gulp.task('browser-sync', function() {
 });
 
 /*
-  Production Server
- */
-gulp.task('serveprod', function() {
-  connect.server({
-    root: ["."],
-    port: process.env.PORT || 5000, // localhost:5000
-    middleware : function(connect, opt) {return [ historyApiFallback() ]},
-    livereload: false
-  });
-});
-
+  Styles Task
+*/
 gulp.task('styles',function() {
   // Compile fonts
   gulp.src('node_modules/bootstrap/fonts/**.*')
@@ -129,7 +116,6 @@ gulp.task('default', ['images','styles','scripts','browser-sync'], function() {
   return buildScript('main.js', true); // browserify watch for JS changes
 });
 
-gulp.task('deploy', ['images','styles','scripts', 'serveprod'], function() {
-  gulp.watch('css/**', ['styles']); // gulp watch for stylus changes
+gulp.task('build', ['images','styles','scripts'], function() {
   return buildScript('main.js', true); // browserify watch for JS changes
 });
