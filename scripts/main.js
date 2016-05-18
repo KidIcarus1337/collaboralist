@@ -13,11 +13,7 @@ class Application extends React.Component {
   render() {
     var location = this.props.location[0];
     if (location == "") {
-      if (window.location.pathname != "/") {
-        window.location.replace("/");
-      } else {
-        return <Generator />;
-      }
+      return <Generator />;
     } else if (location == "list") {
       var listId = this.props.location[1];
       var re = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
