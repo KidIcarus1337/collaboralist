@@ -2,6 +2,13 @@
   /* Reserved for grabbing cursor */
 }
 
+
+/*
+----------------------------------
+        TAGS
+----------------------------------
+*/
+
 html {
   height: 100%;
 }
@@ -24,6 +31,13 @@ ul {
   list-style: none;
 }
 
+
+/*
+----------------------------------
+        UTILITY
+----------------------------------
+*/
+
 .unselectable {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -45,6 +59,13 @@ ul {
   cursor: -webkit-grabbing;
 }
 
+
+/*
+----------------------------------
+        GENERAL
+----------------------------------
+*/
+
 .logo {
   font-family: 'Bad Script', cursive;
 }
@@ -52,6 +73,28 @@ ul {
 .component-wrapper {
   padding-top: 5%;
 }
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  font-style: italic;
+  color: #ffe3ba;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  font-style: italic;
+  color: #ffe3ba;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  font-style: italic;
+  color: #ffe3ba;
+}
+:-moz-placeholder { /* Firefox 18- */
+  font-style: italic;
+}
+
+/*
+----------------------------------
+        GENERATOR
+----------------------------------
+*/
 
 .generator-container {
   border: 2px solid #84adb1;
@@ -105,21 +148,12 @@ ul {
   font-size: 16px;
 }
 
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  font-style: italic;
-  color: #ffe3ba;
-}
-::-moz-placeholder { /* Firefox 19+ */
-  font-style: italic;
-  color: #ffe3ba;
-}
-:-ms-input-placeholder { /* IE 10+ */
-  font-style: italic;
-  color: #ffe3ba;
-}
-:-moz-placeholder { /* Firefox 18- */
-  font-style: italic;
-}
+
+/*
+----------------------------------
+        LIST
+----------------------------------
+*/
 
 .list-header {
   margin-top: 1em;
@@ -139,6 +173,8 @@ ul {
   border-radius: 6px;
 }
 
+/* Loading Spinner */
+/*--------------------*/
 .loading-container {
   width: 100%;
   height: 80px;
@@ -156,11 +192,12 @@ ul {
   animation: loaderSpin 0.6s infinite linear;
 }
 @-webkit-keyframes loaderSpin {
-  0%   { -webbkit-transform: rotate(0deg); }
-  100% { -webbkit-transform: rotate(360deg); } }
+  0%   { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); } }
 @keyframes loaderSpin {
   0%   { transform: rotate(0deg); }
   100% { transform: rotate(360deg); } }
+/*--------------------*/
 
 .list {
   position: relative;
@@ -178,6 +215,8 @@ ul {
   position: relative;
 }
 
+/* Checkmark */
+/*--------------------*/
 .checkmark-container {
   position: absolute;
   width: 50px;
@@ -215,6 +254,7 @@ ul {
     stroke-dashoffset: 0;
   }
 }
+/*--------------------*/
 
 .reorder-button {
   position: absolute;
@@ -264,6 +304,8 @@ ul {
   color: #f6bc50;
 }
 
+/* Suggestions */
+/*--------------------*/
 .suggestions-box {
   position: absolute;
   width: 100%;
@@ -295,6 +337,14 @@ ul {
 .suggestion-highlight {
   background-color: #b0e8ec !important;
 }
+/*--------------------*/
+
+
+/*
+----------------------------------
+        ERROR/404
+----------------------------------
+*/
 
 .error-header {
   text-align: center;
@@ -318,6 +368,13 @@ ul {
   font-size: 20px;
 }
 
+
+/*
+----------------------------------
+        FOOTER
+----------------------------------
+*/
+
 .footer {
   position: absolute;
   padding-bottom: 10px;
@@ -337,9 +394,13 @@ ul {
   border-bottom: 1px solid #d1d1d1;
 }
 
+
 /*
-  Media queries
+----------------------------------
+        MEDIA QUERIES
+----------------------------------
 */
+
 @media (max-width: 767px) {
   body {
     background: #fff;

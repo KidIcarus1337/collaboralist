@@ -1,5 +1,5 @@
 import React from "react";
-import autobind from 'autobind-decorator';
+import autobind from "autobind-decorator";
 
 @autobind
 class SearchSuggestions extends React.Component {
@@ -14,7 +14,7 @@ class SearchSuggestions extends React.Component {
         {this.props.suggestions.map(function(val, index) {
           return (
             <div key={index}
-                 className={`suggestion unselectable ${index == highlightIndex ? 'suggestion-highlight' : ''}`}
+                 className={`suggestion unselectable ${index == highlightIndex ? "suggestion-highlight" : ""}`}
                  onClick={function() {props.suggestionSubmit(index)}}
                  onMouseOver={suggestionsMouseOver}
                  onMouseOut={suggestionsMouseOut}>{val}</div>

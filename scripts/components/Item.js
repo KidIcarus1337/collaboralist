@@ -1,9 +1,9 @@
 import React from "react";
-import { Motion, spring } from 'react-motion';
-import range from 'lodash.range';
-import autobind from 'autobind-decorator';
+import { Motion, spring } from "react-motion";
+import range from "lodash.range";
+import autobind from "autobind-decorator";
 
-const springConfig = {stiffness: 300, damping: 25};
+const springConfig = {stiffness: 300, damping: 25}; // Settings for react-motion animation
 
 @autobind
 class Item extends React.Component {
@@ -11,26 +11,29 @@ class Item extends React.Component {
     super();
 
     this.state = {
+      // Booleans for custom CSS responses to user interactions
       itemHovered: false,
       reorderHovered: false,
       reorderPressed: false,
+
       windowWidth: 0
     }
   }
 
   componentDidMount() {
     this.getWindowWidth();
-    window.addEventListener('touchend', this.reorderMouseUp);
-    window.addEventListener('mouseup', this.reorderMouseUp);
+    window.addEventListener("touchend", this.reorderMouseUp);
+    window.addEventListener("mouseup", this.reorderMouseUp);
     window.addEventListener("resize", this.getWindowWidth);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('touchend', this.reorderMouseUp);
-    window.removeEventListener('mouseup', this.reorderMouseUp);
+    window.removeEventListener("touchend", this.reorderMouseUp);
+    window.removeEventListener("mouseup", this.reorderMouseUp);
     window.removeEventListener("resize", this.getWindowWidth);
   }
 
+  // Handler used to retrieve the current window width whenever it is resized
   getWindowWidth() {
     this.setState({
       windowWidth: Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
@@ -77,21 +80,25 @@ class Item extends React.Component {
     });
   }
 
+  // Handler for checking off item
   checkmarkClick() {
     var props = this.props;
     this.props.checkItem(props.index);
+
+    // If auto delete is enabled, delete item following a short delay after checking it
     if (this.props.autoDelete) {
       props.setDelete(props.index, props.orderIndex);
     }
   }
 
+  // Handler for when user changes item
   confirmChange(event) {
     event.preventDefault();
     var props = this.props;
     var details = props.details;
     var key = props.index;
     this.props.updateItem(key, this.itemText.value, props.orderIndex);
-    this.itemText.value = details.count ? `${details.count} - ${details.name}` : `${details.name}`;
+    this.itemText.value = details.count ? `${details.count} - ${details.name}` : `${details.name}`; // Format text
     this.itemText.blur();
   }
 
@@ -103,6 +110,8 @@ class Item extends React.Component {
     const order = this.props.order.length !== 0 ? this.props.order : range(Object.keys(this.props.items).length);
     const lastPressed = this.props.lastPressed;
     const orderIndex = this.props.orderIndex;
+
+    // Styles settings for animation
     const style = lastPressed === orderIndex && isPressed
       ? {
           scale: spring(1.06, springConfig),

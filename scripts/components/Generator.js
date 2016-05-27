@@ -1,13 +1,14 @@
 import React from "react";
 import Footer from "./Footer";
 import util from "../utilities";
-import autobind from 'autobind-decorator';
+import autobind from "autobind-decorator";
 
 @autobind
 class Generator extends React.Component {
   constructor() {
     super();
 
+    // Booleans for custom CSS responses to user interactions
     this.state = {
       buttonHovered: false,
       buttonPressed: false
@@ -15,28 +16,30 @@ class Generator extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('touchend', this.buttonMouseUp);
-    window.addEventListener('mouseup', this.buttonMouseUp);
+    window.addEventListener("touchend", this.buttonMouseUp);
+    window.addEventListener("mouseup", this.buttonMouseUp);
   }
   
   componentWillUnmount() {
-    window.removeEventListener('touchend', this.buttonMouseUp);
-    window.removeEventListener('mouseup', this.buttonMouseUp);
+    window.removeEventListener("touchend", this.buttonMouseUp);
+    window.removeEventListener("mouseup", this.buttonMouseUp);
   }
-  
+
+  // Handler for redirecting to a newly generated list
   redirect(UUID) {
     window.location.replace(
       window.location.pathname + window.location.search + "#/list/" + UUID
     );
   }
 
+  // Handler for generating a new list
   generateList() {
-    window.removeEventListener('touchend', this.buttonMouseUp);
-    window.removeEventListener('mouseup', this.buttonMouseUp);
+    window.removeEventListener("touchend", this.buttonMouseUp);
+    window.removeEventListener("mouseup", this.buttonMouseUp);
     var UUID = util.generateUUID();
     this.redirect(UUID);
   }
-
+  
   buttonMouseOver() {
     this.setState({
       buttonHovered: true
