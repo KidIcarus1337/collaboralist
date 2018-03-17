@@ -6,7 +6,7 @@ class Footer extends React.Component {
       <div className="footer">
         <p>Developed & Designed by <a href="https://github.com/KidIcarus1337">Jared Sasser</a></p>
         <div className="footer-divider"></div>
-        <p>© 2016 Collaboralist</p>
+        <p>© 2018 Collaboralist</p>
       </div>
       )
   }
