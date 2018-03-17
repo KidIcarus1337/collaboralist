@@ -30,7 +30,7 @@ class List extends React.Component {
     this.state = {
       name: "List",
 
-      // Seperate object for Firebase since re-base can only be synced with one state object at a time.
+      // Separate object for Firebase since re-base can only be synced with one state object at a time.
       firebase: {
         items: {},
         history: {},
@@ -301,7 +301,7 @@ class List extends React.Component {
 
   // Mobile handler for handleReorderStart
   handleTouchStart(event, key, pressLocation) {
-    List.initAutoScroll(); // Initialize default settings for item reorder scrolling
+    this.initAutoScroll(); // Initialize default settings for item reorder scrolling
     scrollInterval = setInterval(this.autoScroll, 20); // Watch for scrolling opportunities
     this.handleReorderStart(event.touches[0], key, pressLocation);
   }
