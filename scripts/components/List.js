@@ -8,8 +8,20 @@ import util from "../utilities";
 import autobind from "autobind-decorator";
 
 // Firebase
-import Rebase from "re-base";
-var base = Rebase.createClass("https://collaboralist.firebaseio.com/");
+var Rebase = require('re-base');
+var firebase = require('firebase');
+var app = firebase.initializeApp({
+  apiKey: 'AIzaSyA3nsfQnNLjz9UcSA_t9DprLLZYLJFAAUg',
+  authDomain: 'collaboralist-d55a9.firebaseapp.com',
+  databaseURL: 'https://collaboralist-d55a9.firebaseio.com',
+  projectId: "collaboralist-d55a9",
+  storageBucket: 'collaboralist-d55a9.appspot.com',
+  messagingSenderId: '584259612243'
+});
+var base = Rebase.createClass(app.database());
+
+// import Rebase from "re-base";
+// var base = Rebase.createClass("https://collaboralist-d55a9.firebaseio.com");
 
 var deleteTimeout;
 var deleteList = [];

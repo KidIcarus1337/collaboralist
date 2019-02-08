@@ -35,3 +35,4 @@ node_modules
 # Miscellaneous
 .DS_Store
 .idea
+package-lock.json
